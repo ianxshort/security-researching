@@ -2,6 +2,9 @@
 ## Platform: HTB
 ## Date: 06/12/26
 ## Difficulty: Easy
+## Tools: nmap, Burp Suite, gobuster, netcat, php-reverse-shell
+
+
 
 ### Recon 
  
@@ -12,7 +15,7 @@
  - 22/tcp ssh (OpenSSH 7.6p1)
  - 80/tcp http (Apache 2.4.29)
 
- Visited the site and proxied traffic through Burpsuite. Burpsuite's passive sitemap revealed a  hidden login page /cdi-cgi/login, which was not located anywhere on the initial page. 
+ Visited the site and proxied traffic through Burpsuite. Burpsuite's passive sitemap revealed a  hidden login page /cdn-cgi/login, which was not located anywhere on the initial page. 
 
  Upon visiting the hidden page a login prompt was presented. Clicking the option titled "Login as Guest" under the credential prompt allowed access to a variety of user navigation options. 
 
@@ -36,11 +39,11 @@ document.cookie = "role=admin; path=/"
 document.cookie = "user=34322; path=/"
 ```
 
-Server accepted session cookies with additional verification -- broken access control. Allowed access to admin-restricted "Uploads" page
+Server accepted session cookies without additional verification -- broken access control. Allowed access to admin-restricted "Uploads" page
 
 **PHP Reverse Shell**
 
-Changed /user/share/webshells/php/php-reverse-shell.php with tun0 ip. Uploaded the shell to the upload page. 
+Changed /usr/share/webshells/php/php-reverse-shell.php with tun0 ip. Uploaded the shell to the upload page. 
 
 Set up listener:
 ```bash
@@ -61,17 +64,17 @@ Caught shell as www-data
 
 **Lateral Movement**
 
-Upgradede shell:
+Upgraded shell:
 ```bash
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
 Navigated to web server php files and searched for credentials 
 ```bash 
-cd /var/www/html/cdn/cgi/login
+cd /var/www/html/cdn-cgi/login
 cat * | grep -i passw*
 ```
-Found the harcoded password MEGACORP_4dm1n!
+Found the harcoded password MEGACORP_4dm1n!!
 
 Checked available users on system 
 ```bash
@@ -118,7 +121,7 @@ chmod +x cat
 
  Prepended /tmp to Path so the fake cat gets found first
 ```bash
-export PATH=/tmp: $PATH
+export PATH=/tmp:$PATH
 ```
 Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root
 
@@ -142,4 +145,4 @@ cd /root
 
 ### Key Takeaway
 
-
+Each vulnerability directly opened the door for the next. The IDOR leaked the admin's access ID,  which allowed for Broken Access Control and access to the uploads page. Unrestricted file upload gave me a foothold within the system. Credentials hardcoded into source files allowed for lateral movement. The SUID binary calling commands without full paths allowed for me to PATH hijack to root. Each step's success was predicated on the previous, resulting in consequential and compounding access - starting from guest user to full root compromise.
