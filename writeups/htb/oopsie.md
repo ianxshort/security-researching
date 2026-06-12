@@ -22,6 +22,29 @@
 
 ** IDOR + Broken Access Control **
 
+Logged in as a guest. Noticed the URL contained an ID parameter: 
+/cdn-cgi/login/admin.php?content=accounts&id=2
+
+Changed id=2 to id=1 - server returned admin details without authorization check
+
+![Admin Details](admin_details.png)
+
+Used Access ID to forge session cookies in browser console
+
+```javascript
+document.cookie = "role=admin; path=/" 
+document.cookie = "user=34322; path=/"
+```
+
+Server accepted session cookies with additional verification -- broken access control. Allowed access to admin-restricted "Uploads" page
+
+
+
+
+
+
+
+
 
 
 
