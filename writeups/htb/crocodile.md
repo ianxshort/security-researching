@@ -18,6 +18,7 @@ Scan found two ports
 Connected to the ftp server 
 
 **Enumerating FTP**
+
 Used Dir in to list the files stored on FTP 
 
 ![Found_Files](ftp_files.jpeg)
@@ -25,12 +26,14 @@ Used Dir in to list the files stored on FTP
 Downloaded both files using the get command 
 
 Used cat to reveal the contents of the exposed files 
+
 ![credentials](crocodile_creds.jpeg)
 
 Attempted to use obtained credentials to gain elevated access, but was denied
 
 **Website Investigation**
-Investigatated the http server listed on the initial scan
+
+Investigated the http server listed on the initial scan
 
 http://10.129.108.196
 
