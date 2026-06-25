@@ -21,13 +21,13 @@ Connected to the ftp server
 
 Used Dir in to list the files stored on FTP 
 
-![Found_Files](ftp_files.jpeg)
+![Found_Files](Images/ftp_files.jpeg)
 
 Downloaded both files using the get command 
 
 Used cat to reveal the contents of the exposed files 
 
-![credentials](crocodile_creds.jpeg)
+![credentials](Images/crocodile_creds.jpeg)
 
 Attempted to use obtained credentials to gain elevated access, but was denied
 
@@ -39,7 +39,7 @@ http://10.129.108.196
 
 Used Wappalyzer to analyze the technology used to create the website 
 
-![Wappalyzer_Results](crocodile_credentials.jpeg)
+![Wappalyzer_Results](Images/crocodile_gobuster.jpeg)
 
 
 ### Exploitation
@@ -50,12 +50,12 @@ Used Gobuster to discover hidden and hardly accessible pages and directories.
 gobuster dir -u 10.129.108.196/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php, html
 ```
 
-![Gobuster_Results](crocodile_gobuster.jpeg)
+![Gobuster_Results](Images/crocodile_gobuster.jpeg)
 
 Found page login.php. 
 Navigated to URL http://10.129.108.196/login.php
 
-![Login_Page](crocodile_login.jpeg)
+![Login_Page](Images/crocodile_login.jpeg)
 
 ### Initial Access
 
@@ -64,6 +64,6 @@ Authenticated as admin using exposed credentials found on ftp server
 ## Flag Retrieval
 
 Retrieved flag on homepage 
-![flag_capture](crocodile_flag.jpeg)
+![flag_capture](Images/crocodile_flag.jpeg)
 
 
