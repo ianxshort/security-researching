@@ -129,7 +129,10 @@ Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root
 /usr/bin/bugtracker
 ```
 
-Path was still hijacked so full path was used to read the root flag
+Path was still hijacked so full path was used to read the root flag: 
+
+Flag
+---
 
 ```bash 
 cd /root
