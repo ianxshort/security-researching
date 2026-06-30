@@ -135,7 +135,7 @@ Path was still hijacked so full path was used to read the root flag
 cd /root
 /bin/cat /root/root.txt
 ```
-![Root Flag](rootflag.jpeg)
+![Root Flag](Images/rootflag.jpeg)
 
 
 
