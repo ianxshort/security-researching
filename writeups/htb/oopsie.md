@@ -30,7 +30,7 @@ Logged in as a guest. Noticed the URL contained an ID parameter:
 
 Changed id=2 to id=1 - server returned admin details without authorization check
 
-![Admin Details](admin_details.png)
+![Admin Details](Images/admin_details.png)
 
 Used Access ID to forge session cookies in browser console
 
@@ -98,7 +98,7 @@ Found and Read user flag:
 ls /home/robert
 cat /home/robert/user.txt
 ```
-![User flag](userflag.png)
+![User flag](Images/userflag.png)
 
 
 **Privilege Escalation**
