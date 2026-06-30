@@ -2,7 +2,7 @@
 ## Platform: HTB
 ## Date: 6/24/26
 ## Difficulty: Easy
-## Tools: Wappalyzer 
+## Tools: nmap, Wappalyzer, gobuster
 
 
 
