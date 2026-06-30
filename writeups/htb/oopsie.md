@@ -131,13 +131,15 @@ Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root
 
 Path was still hijacked so full path was used to read the root flag: 
 
-Flag
----
+
 
 ```bash 
 cd /root
 /bin/cat /root/root.txt
 ```
+
+Flag
+---
 ![Root Flag](Images/rootflag.jpeg)
 
 
