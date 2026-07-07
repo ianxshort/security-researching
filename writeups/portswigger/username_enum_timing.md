@@ -20,8 +20,8 @@ Captured a "POST /login" to target using Burp Proxy
 ![Post-Capture](Images/usr-enum-post.jpeg)
 
 - Sent the Request to Repeater for manual testing 
-- Observed that repeated failed logins triggerted the application IP-based brute-force protection
-- Reviewed Requests in Logger and noticed two distinct response lengths 
+- Observed that repeated failed logins triggered the application IP-based brute-force protection
+- Reviewed requests in Logger and noticed two distinct response lengths 
 
 #### Identifying Brute-Force IP Protection and Bypassing
 
@@ -83,7 +83,7 @@ This observation indicated that password verification time was measurable and co
 Sent POST /login request to intruder and selected the Pitchfork Attack
 Added payload positions for both username and X-Forwarded-For Fields 
 - Username (Wordlist) = Candidate usernames
-- X-Fowarded-For (Numbers) = 14-114
+- X-Forwarded-For (Numbers) = 14-114
 
 ![Username-Wordlist](Images/usr-enum-payload2.jpeg)
 ![X-Forwarded-For-list](Images/usr-enum-payload1.jpeg)
@@ -93,7 +93,7 @@ Set the password to a fixed long string. Used the previously identified principl
 
 After completing the attack, enabled: 
 - Response Received 
-- Respone Completed 
+- Response Completed 
 
 columns in Intruder results 
 
@@ -110,7 +110,7 @@ Conducted a second Intruder attack using the obtained username
 
 **Positions**
 - Password (Wordlist) = Candidate Passwords
-- X-Fowarded-For (Numbers) = 125-225
+- X-Forwarded-For (Numbers) = 125-225
 
 ![Password-BruteForce](Images/usr-enum-pbrute.jpeg)
 
@@ -129,12 +129,12 @@ Successfully accessed the user account page and completed the lab
 
 ## Key Takeaway
 
-This lab demonstrated how a chain of small weakness can combine into a successful authentication attack. 
+This lab demonstrated how a chain of small weaknesses can combine into a successful authentication attack. 
 
 
 - X-Forwarded-For header manipulation can be used to bypass IP-based brute force protection
 - Timing differences in Authentication can leak whether a username exists or not 
-- A compromised username makes it signifigantly easier to brute-force the corresponding password 
+- A compromised username makes it significantly easier to brute-force the corresponding password 
 
 ***Proper Defenses***
 - Normalize execution time for both real and fake credentials to stop timing-based credential enumeration
@@ -142,7 +142,7 @@ This lab demonstrated how a chain of small weakness can combine into a successfu
 - Don't trust the client claimed XFF header and instead properly configure the proxy to append the real connecting IP to the chain
     - Configure the application to trust only the rightmost N entries in the XFF header, corresponding to the known number of trusted proxy hops since they were appended by proxies directly noting the connection (not the client-supplied ones) 
 
-- Additonal rate-limiting keys should be implemeted, such as per account and per session, since IP alone isn't sufficient enough for brute force detection
+- Additional rate-limiting keys should be implemented, such as per account and per session, since IP alone isn't enough for brute force detection
 
 
 
