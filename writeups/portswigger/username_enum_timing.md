@@ -78,7 +78,7 @@ This observation indicated that password verification time was measurable and co
 
 ## Exploitation
 
-#### Enumerating a Valid Username 
+### Enumerating a Valid Username 
 
 Sent POST /login request to intruder and selected the Pitchfork Attack
 Added payload positions for both username and X-Forwarded-For Fields 
@@ -104,11 +104,31 @@ Isolated the `oracle` request and repeated it multiple times in Repeater to conf
 ![Oracle-Confirmation](Images/usr-enum-usrconfirm.jpeg)
 
 
+### BruteForcing the Password 
 
+Conducted a second Intruder attack using the obtained username 
 
+**Positions**
+- Password (Wordlist) = Candidate Passwords
+- X-Fowarded-For (Numbers) = 125-225
+
+![Password-BruteForce](Images/usr-enum-pbrute.jpeg)
+
+Found the password by sorting by status code (302) 
+
+![Password-Found](Images/usr-enum-passfound.jpeg)
+
+### Account Access 
+
+Logged in using the discovered username and password 
+Successfully accessed the user account page and completed the lab 
+
+![Lab-Completed](Images/usr-enum-solved.jpeg)
 
 ---
 
 ## Key Takeaway
+
+This lab demonstrated how a chain of small weakness can combine into a successfull authentication attack
 
 
