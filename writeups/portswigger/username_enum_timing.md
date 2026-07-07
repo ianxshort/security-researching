@@ -129,6 +129,20 @@ Successfully accessed the user account page and completed the lab
 
 ## Key Takeaway
 
-This lab demonstrated how a chain of small weakness can combine into a successfull authentication attack
+This lab demonstrated how a chain of small weakness can combine into a successful authentication attack. 
+
+
+- X-Forwarded-For header manipulation can be used to bypass IP-based brute force protection
+- Timing differences in Authentication can leak whether a username exists or not 
+- A compromised username makes it signifigantly easier to brute-force the corresponding password 
+
+***Proper Defenses***
+- Normalize execution time for both real and fake credentials to stop timing-based credential enumeration
+
+- Don't trust the client claimed XFF header and instead properly configure the proxy to append the real connecting IP to the chain
+    - Configure the application to trust only the rightmost N entries in the XFF header, corresponding to the known number of trusted proxy hops since they were appended by proxies directly noting the connection (not the client-supplied ones) 
+
+- Additonal rate-limiting keys should be implemeted, such as per account and per session, since IP alone isn't sufficient enough for brute force detection
+
 
 
