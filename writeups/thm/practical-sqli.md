@@ -6,6 +6,10 @@
 
 ### Level 1 
 
+#### Objective 
+
+**Extract credentials from vulnerable database**
+
 #### **Enumerate Column Count & Make Output Visible +**
 
 Performed column enumeration using numbers to satisfy UNION conditions 
@@ -76,21 +80,40 @@ Extracted usernames and passwords from `staff_users`
 
 ![Dump-Credentials](Images/sqli1-dumpcredentials.jpeg)
 
-Found admin password 'p4ssword' from injected query output 
+Found Martin's password 'pas$$word' from injected query output 
 
 #### **Capture Flag**
 
 ![Flag-Capture](Images/sqli1-flag.jpeg)
 
-
 ---
-
-
-
 
 
 ### Level 2
 
+#### Objective 
+
+**Authenticate without valid credentials**
+
+#### **Authentication Bypass**
+
+Presented with a login form at https://website.thm/login
+
+Entered payload 
+
+```SQL
+' OR 1=1;--
+```
+
+- Premature field closure (') does not match any user 
+- `OR 1=1` always evaluates to true (returning a row)
+- `;--` ends the statements and comments everything after it (password)
+
+
+
+![Auth-Bypass](Images/sqli2-authbypass.jpeg)
+
+Login was bypassed and flag was captured 
 
 
 
