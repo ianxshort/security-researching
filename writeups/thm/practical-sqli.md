@@ -213,9 +213,15 @@ Successfully authenticated using the recovered credentials
 
 ![Flag-Capture](Images/sqli3-flag.jpeg)
 
-
+---
 
 ### Level 4 
+#### Objective 
+
+**Extract credentials using Response Timing**
+
+
+
 
 
 
