@@ -35,9 +35,19 @@ Confirmed that XML encoded values bypass the target's WAF
 
 #### Column Enumeration
 
+Enumerated the column count to prepare for UNION SELECT SQL Injection
 
+```SQL
+1 UNION SELECT NULL
+```
 
+Encoded SQL query into XML-entity in order to bypass target WAF 
 
+![Encoded-Union-Enum](SQLi_Images/SQLI_col-enum-encode.jpeg)
+
+Application returned `0 units` for requests containing >1 columns indicating the column count=1
+
+![Column-Count](SQLi_Images/SQLi_col-enum-conf.jpeg)
 
 
 ### Exploitation
