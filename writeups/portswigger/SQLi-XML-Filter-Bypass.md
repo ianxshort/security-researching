@@ -52,9 +52,17 @@ Application returned `0 units` for requests containing >1 columns indicating the
 
 ### Exploitation
 
+![Exploit-Encoded](SQLi_Images/SQLi_exploit-enc.jpeg)
+
+![Dump-Creds](SQLi_Images/SQLi_got-creds.jpeg)
 
 
 
+
+
+### Room Complete 
+
+[Flag-Capture](SQLi_Images/SQLi_solve.jpeg)
 
 
 ### Key Takeaway
