@@ -1,4 +1,4 @@
-## Target: 
+## Target: Port Swigger Web Security Academy - Shopping Application
 ## Platform: PortSwigger
 ## Date: 07/07/26
 ## Difficulty: Practitioner
@@ -58,8 +58,9 @@ Paylods containing more than column returned `0 units`, signifying the SQL query
 
 With column count confirmation, I concatenated the username and password columns from users table into a single output 
 
+
 ```SQL
-SELECT username || ':' || password FROM users
+UNION SELECT username || ':' || password FROM users
 ```
 
 Encoded query into XML entity to bypass WAF
@@ -85,3 +86,10 @@ Authenticated using the recovered administrators credentials, successfully compl
 
 
 ### Key Takeaways
+
+This lab highlighted several different key concepts in SQL injection and defending against them
+
+- Input filterting alone isn't enough to properly defend against Injection techniques. Encoding injection payloads is enough to bypass simple string matching mechanisms
+- Burp Suite's Hackvertor extension provides a quick and easy way to encode entities in a format of your choosing 
+- Enumerating the original query's column count is a critical first step in any UNION-based injection attack
+
