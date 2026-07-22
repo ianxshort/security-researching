@@ -37,18 +37,17 @@ Error-free respone and larger units confirmed that XML encoded values bypass the
 
 #### Column Enumeration
 
-To perform UNION BASED SQL injection, the number of columns returned in the injected query must match the number of columns returned in the original query. 
-Enumerated the column count to prepare for UNION SELECT SQL Injection
+To perform UNION BASED SQL injection, the number of columns returned in the injected query must match the number of columns returned in the original query. Therefore, I began to enumerate the column count using NULL as an incremental payload 
 
 ```SQL
 1 UNION SELECT NULL
 ```
 
-Encoded SQL query into XML-entity in order to bypass target WAF 
+To continue the WAF bypass, I encoded each injected query into a XML-entity 
 
 ![Encoded-Union-Enum](SQLi_Images/SQLI_col-enum-encode.jpeg)
 
-Application returned `0 units` for requests containing >1 columns indicating the column count=1
+Paylods containing more than column returned `0 units`, signifying the SQL query structure was invalid and the column count was 1.
 
 ![Column-Count](SQLi_Images/SQLi_col-enum-conf.jpeg)
 
@@ -57,7 +56,7 @@ Application returned `0 units` for requests containing >1 columns indicating the
 
 #### Credential Exraction
 
-Concatenated username and password from username table 
+With column count confirmation, I concatenated the username and password columns from users table into a single output 
 
 ```SQL
 SELECT username || ':' || password FROM users
@@ -67,11 +66,11 @@ Encoded query into XML entity to bypass WAF
 
 ![Exploit-Encoded](SQLi_Images/SQLi_exploit-enc.jpeg)
 
-Observed response and dumped credentials 
+The application reflected the injected query into the response, revealing the table's stored credentials
 
 ![Dump-Creds](SQLi_Images/SQLi_got-creds.jpeg)
 
-- Collected Credentials 
+- Collected Admin Credentials 
 
 Username: administrator
 Password: jm920ccdtmbvmcctlngy
@@ -80,7 +79,7 @@ Password: jm920ccdtmbvmcctlngy
 
 #### Authentication
 
-Used adminstrators credentials to log in and solve the lab 
+Authenticated using the recovered administrators credentials, successfully completing the PortSwiggers lab
 
 [Flag-Capture](SQLi_Images/SQLi_solve.jpeg)
 
