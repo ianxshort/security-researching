@@ -12,29 +12,32 @@
 
 **HomePage**
 
-Presented with a shopping appliation and navigated to the description page of product ID:6 
+The application presented a shopping appliation. I navigated to the description page of Product ID 6, which triggered a stock check request used throughout the entirety of the lab
 
 
 ![Product-ID-Page](SQLi_Images/SQLi_home.jpeg)
 
-Turned intercept on in Proxy and captured a POST /product/stock request 
+Enabled Burp Suite Proxy interception and captured the following request: 
 
 ![Captured-Request](SQLi_Images/SQLi_post.jpeg)
 
 #### Bypass WAF using encoded entities 
 
-Inserted `--'` into the `storeID` field and observed that the request had been blocked 
+Injected `--'` into the `storeID` field and observed that the application rejected the request stating: `Attack Detected`
 
 ![Attack-Detection](SQLi_Images/SQLi_Detect1.jpeg)
 
-Used the extension tool Hackverter to encode the original storeID value of `2` into XML 
+The error message suggested the application's WAF was using signature-based detection to block common injection techniques
+
+The WAF's block mechanism seemed to trigger from string matches, because of this I leveraged Burp Suite's extension tool Hackverter to encode the original storeID value of `2` into an XML entity
 
 ![Second-Bypass](SQLi_Images/SQLi_secondbypass.jpeg)
 
-Confirmed that XML encoded values bypass the target's WAF 
+Error-free respone and larger units confirmed that XML encoded values bypass the target's WAF 
 
 #### Column Enumeration
 
+To perform UNION BASED SQL injection, the number of columns returned in the injected query must match the number of columns returned in the original query. 
 Enumerated the column count to prepare for UNION SELECT SQL Injection
 
 ```SQL
@@ -51,6 +54,8 @@ Application returned `0 units` for requests containing >1 columns indicating the
 
 
 ### Exploitation
+
+#### Credential Exraction
 
 Concatenated username and password from username table 
 
@@ -73,11 +78,11 @@ Password: jm920ccdtmbvmcctlngy
 
 
 
-### Room Complete 
+#### Authentication
 
 Used adminstrators credentials to log in and solve the lab 
 
 [Flag-Capture](SQLi_Images/SQLi_solve.jpeg)
 
 
-### Key Takeaway
+### Key Takeaways
