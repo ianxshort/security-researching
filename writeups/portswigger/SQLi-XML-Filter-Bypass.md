@@ -7,6 +7,7 @@
 - Burp Suite Proxy 
 - Hackvector
 
+---
 
 ### Recon 
 
@@ -51,6 +52,7 @@ Paylods containing more than column returned `0 units`, signifying the SQL query
 
 ![Column-Count](SQLi_Images/SQLi_col-enum-conf.jpeg)
 
+---
 
 ### Exploitation
 
@@ -84,6 +86,7 @@ Authenticated using the recovered administrators credentials, successfully compl
 
 [Flag-Capture](SQLi_Images/SQLi_solve.jpeg)
 
+---
 
 ### Key Takeaways
 
