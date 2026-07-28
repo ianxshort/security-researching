@@ -50,6 +50,16 @@ Accessed `IT-Shared` share via `smbclient`
 - `IT-Onboarding-Checklist.txt`
 - `IT-Portal.html`
 
+`IT-Credentials-Backup.txt` contained two pairs of credentials, explicitly marked as disabled. Notably, the file does reveal a predictable password pattern (Uppercase + Lowercase + Number + Special Character)
+
+![IT-Credentials-Backup](proxyimg/IT-Credentials.jpeg)
+
+
+
+`IT-Onboarding-Checklist.txt` exposed sensative information, notably about a a service named `svc.scanner`. This automated service periodically reads `IT-Shared` every two minutes to inspect file metadata and icons. 
+
+![IT-Onboarding-Checklist](proxyimg/It-Onboarding.jpeg)
+
 
 
 ---
