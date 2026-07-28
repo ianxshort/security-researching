@@ -60,11 +60,23 @@ Accessed `IT-Shared` share via `smbclient`
 
 ![IT-Onboarding-Checklist](proxyimg/It-Onboarding.jpeg)
 
+`IT-Portal.html` was mostly a decorative dashboard page, however the page provided corroborated evidence that `svc.scanner` was a legitimate, frequently used identity within the domain. 
+
+The page stated `Logged in as: svc.scanner`
+
+![IT-Portal](proxyimg/svc-scanner-reveal.jpeg)
+
+Further enumeration of the SMB shares amounted to nothing as anonymous access was denied 
+
+![Share-Acess-Denied](proxyimg/fail-share-access.jpeg)
+
+
 
 
 ---
 
 ### Exploitation
+
 
 
 
