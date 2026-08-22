@@ -11,25 +11,25 @@
 
 ### DOM XSS in `document.write` sink using source `location.search` inside a select element 
 
-Navigate to product page and observe the page has a stock checker functon. 
+Navigate to the product page and observe the page has a stock checker functon. 
 
 ![Home-Page](dom-images/product-page.jpeg)
 
 
 #### Identify the Source and Sink 
 
-Inspecting the live DOM on Chrome DevTools, we find that a JS script is responsible for implementing and updating the form's location.
+Inspecting the live DOM in Chrome DevTools, we find that JavaScript is responsible for implementing and updating the form's location.
 
 ![Pre-DOM](dom-images/pre-exploit-dom.jpeg)
 
-A statically defined array containing the locations "London", "Paris", "Milan" is declared. A for loop then iterates over the array to generate an `<option>` for each element. The Javascript writes these locations using `document.write()`. Further down, we see the result of the Javascript execution from the `<select>` and the location `<option>` elements.
+A statically defined array containing the locations "London", "Paris", and "Milan" is declared. A for loop then iterates over the array to generate an `<option>` for each element. The JavaScript writes these locations using `document.write()`. Further down, we see the result of the JavaScript execution in the form of the `<select>` and the location `<option>` elements.
 
 
 ![original-execution](dom-images/original-js-execution.jpeg)
 
-This output context will be important for successfully injected the future payload.
+This output context will be important for successfully injecting the payload in the future.
 
-Directly below `stores` array we find the source 
+Directly below `stores` arra, we find the source:
 
 ```javascript
 var store = (new URLSearchParams(window.location.search)).get('storeId');
@@ -38,7 +38,7 @@ var store = (new URLSearchParams(window.location.search)).get('storeId');
 
 `window.location.search` extracts the query string from the URL. `URLSearchParams` then parses that query string, allowing `.get('storeId')` to retrieve the value associated with the `storeId` parameter. The value associated with that parameter is then saved to the variable `store`. 
 
-We then identify the sink 
+We then identify the sink: 
 
 ```javascript
 document.write('<select name="storeId">');
@@ -52,14 +52,37 @@ The `document.write()` sink takes the extracted parameter input `store` and writ
 
 
 
-#### Prove Input reaches Sink 
+#### Prove Input Reaches Sink 
 
-First thing to test is whether attacker-controlled input from the URL query reaches the `document.write()` sink and is reflected in the dropdown option.
+The first thing to test is whether attacker-controlled input from the URL query reaches the `document.write()` sink and is reflected in the dropdown option.
 
+![Input-Insertion](dom-images/storeid-insertion.jpeg)
 
+We then verify successful insertion through viewing the location dropdown.
+
+![Updated-Dropdown](dom-images/parameter-added.jpeg)
+> Insertion Confirmed 
 
 
 #### Payload Injection
+
+After confirming successful injection, we craft and inject a payload that calls the `alert` function. As noted earlier, the sink `document.write()` places input within an `<option>` element inside a `<select>` element. To prevent the HTML parser from treating the injected JavaScript as content within the restricted context, we need to break out of the context using a closing `</select>` tag first. 
+
+```javascript 
+</select><script>alert('Hacked By Ian`)</script>
+```
+
+![Successful-Payload](dom-images/select-alert.jpeg)
+> Successful injection execution reflected in the page
+
+
+#### Room Completion 
+
+![Success-Banner](dom-images/select-solved-banner.jpeg)
+
+
+
+
 
 
 
