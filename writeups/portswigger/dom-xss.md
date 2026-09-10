@@ -80,17 +80,7 @@ After confirming successful injection, we craft and inject a payload that calls 
 
 ![Success-Banner](dom-images/select-solved-banner.jpeg)
 
-
-
-
-
-
-
-
-### DOM XSS in jQuery anchor href attribute sink using location.search source
-
-
-
+---
 
 ### DOM XSS `jQuery` in selector sink using a hashchange event 
 
@@ -143,8 +133,42 @@ We deliver the exploit to victim
 > Lab solved banner 
 
 
+### DOM XSS in `jQuery` anchor href attribute sink using location.search source
+
+We being by navitating to the submit feedback page 
+
+![Feedback-Page](dom-images/href-feedbackpage.jpeg)
 
 
+#### Identify the Source and Sink 
+
+Examining the source code we see a Javascript function that changes the anchors `backLink` element using data from the UIRL 
+
+![Vulnerable-Code](dom-images/hashchange-vulnerable-code.jpeg)
+ 
+ We begin by identifying the context of injection by changing the query parameter `returnPath` from `/` to `/Hello`. 
+
+![Sink-Context](dom-images/href-sink-context.jpeg)
+
+This confirms that the JavaScript function is reading data from the URL (source), passing it to the sink `attr()` function, which assigns the value to `href`. 
+
+#### Payload Injection && Confirmation
+
+`href` actually has a protocol that allows you to execute javascript code. `javascript:` is a URI schem within HTML and when it is assigned to href, clicking a link will execute the code contained within the protocol. We can excploit this by changning `returnPath` to `javascript:alert(document.cookie)`
+
+![Payload](dom-images/href-payload.jpeg)
+
+
+#### Room Completion
+
+![Room-Solved-Pic](dom-images/href-lab-completed.jpeg)
+> Success Banner 
+
+---
+
+### Key Takeaways 
+
+The sink defines the context and the payload has to make sense within that context 
 
 
 
