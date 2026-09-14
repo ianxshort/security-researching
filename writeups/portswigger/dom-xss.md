@@ -7,7 +7,7 @@
 - DevTools 
 
 
-
+---
 
 ### DOM XSS in `document.write` sink using source `location.search` inside a select element 
 
@@ -29,14 +29,22 @@ A statically defined array containing the locations "London", "Paris", and "Mila
 
 This output context will be important for successfully injecting the payload in the future.
 
-Directly below `stores` arra, we find the source:
+Directly below `stores` array, we find the source:
 
 ```javascript
 var store = (new URLSearchParams(window.location.search)).get('storeId');
 
 ```
 
-`window.location.search` extracts the query string from the URL. `URLSearchParams` then parses that query string, allowing `.get('storeId')` to retrieve the value associated with the `storeId` parameter. The value associated with that parameter is then saved to the variable `store`. 
+`window.location.search` extracts the query string from the URL.
+
+Example: `?storeId=London`
+
+`URLSearchParams` then parses that query string into parameters JavaScript can work with 
+
+Example: `storeId: London`
+
+This allows `.get('storeId')` to retrieve the value associated with the `storeId` parameter. The retrieved value is then assigned to the variable `store`. 
 
 We then identify the sink: 
 
@@ -48,7 +56,7 @@ if (store) {
 }
 ```
 
-The `document.write()` sink takes the extracted parameter input `store` and writes it to the web page without sanitization.
+The `document.write()` sink takes the attacker-controlled `store` and writes it to the web page without sanitization.
 
 
 
@@ -118,7 +126,7 @@ The string becomes
 
 $('section.blog-list h2:contains(<img src=x onerror=print()>)')
 ```
- Older version of jQuery acted as both a CSS-selector processing and an HTML string -parsing. The developer in this scenario intended for the entire string to be treates a selector query, but forgot the secondary functionality. jQuery sees the <img> tag switches to it's HTML parser mode and instaniates new DOM element in memory. The browser attemmpts to fetch the image source, which fails because x is not a reachable source. This triggers the `onerror`, leading the `print()` function to fire.
+ Older version of jQuery acted as both a CSS-selector processing and HTML string -parsing. The developer in this scenario intended for the entire string to be treates a selector query, but forgot the secondary functionality. jQuery sees the <img> tag switches to it's HTML parser mode and instaniates new DOM element in memory. The browser attempts to fetch the image source, which fails because x is not a reachable source. This triggers the `onerror`, leading the `print()` function to fire.
 
 We verify the payload functionality 
 
@@ -142,9 +150,11 @@ We being by navitating to the submit feedback page
 
 #### Identify the Source and Sink 
 
-Examining the source code we see a Javascript function that changes the anchors `backLink` element using data from the UIRL 
+Examining the source code we see a Javascript function that changes the anchors `backLink` element using data from the URL 
 
-![Vulnerable-Code](dom-images/hashchange-vulnerable-code.jpeg)
+![Vulnerable-Code](dom-images/href-vuln-code.jpeg)
+
+> The code contains the sink `.attr()`, which has the ability to get or set an HTML attribute to an element.
  
  We begin by identifying the context of injection by changing the query parameter `returnPath` from `/` to `/Hello`. 
 
@@ -154,7 +164,7 @@ This confirms that the JavaScript function is reading data from the URL (source)
 
 #### Payload Injection && Confirmation
 
-`href` actually has a protocol that allows you to execute javascript code. `javascript:` is a URI schem within HTML and when it is assigned to href, clicking a link will execute the code contained within the protocol. We can excploit this by changning `returnPath` to `javascript:alert(document.cookie)`
+`href` actually has a protocol that allows you to execute javascript code. `javascript:` is a URI scheme within HTML and when it is assigned to href, clicking a link will execute the code contained within the protocol. We can excploit this by changning `returnPath` to `javascript:alert(document.cookie)`
 
 ![Payload](dom-images/href-payload.jpeg)
 
@@ -168,7 +178,12 @@ This confirms that the JavaScript function is reading data from the URL (source)
 
 ### Key Takeaways 
 
-The sink defines the context and the payload has to make sense within that context 
+ - Beyond serving as CSS selector, jQuery can interpret a string as HTML and turn that string into a DOM element 
+
+ - When an application blocks certain XSS techniques (`<script>`), look for other HTML elements and event-handler combinations that the sink permits 
+
+- The sink defines the context and the payload has to make sense within that context 
+
 
 
 
