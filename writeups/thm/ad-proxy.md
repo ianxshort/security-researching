@@ -56,7 +56,7 @@ Accessed `IT-Shared` share via `smbclient`
 
 
 
-`IT-Onboarding-Checklist.txt` exposed sensative information, notably about a a service named `svc.scanner`. This automated service periodically reads `IT-Shared` every two minutes to inspect file metadata and icons. 
+`IT-Onboarding-Checklist.txt` exposed sensitive information, notably about a a service named `svc.scanner`. This automated service periodically reads `IT-Shared` every two minutes to inspect file metadata and icons. 
 
 ![IT-Onboarding-Checklist](proxyimg/It-Onboarding.jpeg)
 
@@ -100,11 +100,48 @@ Responder receives `svc.scanner` NTLM hash and we save it to a file. We then use
 hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt --force
 ```
 
+Hashcat returns: 
 
+[Cracked-Pass](proxyimg/cracked-pass.jpeg)
 
 ---
 
-### Post Exploitation
+We verify the validity of the credentials using NetExec and list accessible shares:
+
+![nxc](proxyimg/verify-creds.jpeg)
+> Successful Authentication + Shares
+
+
+### Post-Exploitation
+
+With a foothold now in the network, we look to gather a better picture on how the environment is connected. We can use the `BloodHound` an identity and access recon tool, to enumerate relationships within the environment
+
+
+```bash
+bloodhound-ce.py --zip -c All -d ctf.local -u 'svc.scanner' -p '1summerlove!' -dc DC01.ctf.local -ns 10.146.175.176
+```
+
+`BloodHound` reveals that svc.scanner has `AllowedToDelegate` to the CIFS service on DC01. 
+
+> Delegation is essentially a "middleman" permission, it allows a trusted service identity to act on behalf of a user when accessing another service. From the target service's perspective, the request is coming the user rather than the trusted service identity. 
+
+We test the extent of this permission by using `GetST.py` to request a service ticket for the CIFS service running on DC01 on behalf of the Administrator
+
+
+![Impersonate-Admin](proxyimg/service-ticket.jpeg)
+> `getST.py` successfully obtains the service ticket
+
+We tell our shell which Kerberos credential cache to use for authentication by setting `KRB5CCNAME` to the .ccache file containing the service ticket
+
+
+
+### Flag Capture 
+
+Using the cached ticket, we use `smbexec.py` to authenticate to DC01 over SMB. We use `-k` flag to tell `smbexec.py` to authenticate using Kerberos authentication and `-no-pass` to prevent it from prompting for a password.
+
+Upon successful authentication, a semi-interactive SYSTEM shell is spawned on the Domain controller. We find the flag on the Desktop of the Administrator and output it's content.
+
+![Shell-Flag](proxyimg/shell-flag.jpeg)
 
 
 
