@@ -11,9 +11,11 @@ This project documents my cybersecurity journey through THM, HTB, and PortSwigge
 ### PortSwigger
 - [SQLi XML Filter Bypass](writeups/portswigger/sqli-xml-filter-bypass.md)
 - [Username Enumeration via Timing](writeups/portswigger/username_enum_timing.md)
-
+- [DOM XSS](writeups/portswigger/dom-xss.md)
 
 ### TryHackMe
 - [AD Proxy](writeups/thm/ad-proxy.md)
 - [Practical SQLi](writeups/thm/practical-sqli.md)
+- [Recruit](writeups/thm/recruit.md)
+
 
