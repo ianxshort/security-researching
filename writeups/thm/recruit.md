@@ -38,31 +38,32 @@ We begin by returning to the browser and visiting the `mail` page that was disco
 
 ![Mail-Page](recruit-images/recruit_hr_username.jpeg)
 
-The mail page reveals several important details about the web application, including username details (`username:hr`) and sensative file information. The mail document states that HR login credentials can be found in `config.php`. In many applications `config.php` holds sensitive information such as database passwords, API keys, and other configuration details. 
+The `/mail` directory revealed a `mail.log` file containing information about the HR account. The log disclosed the username hr and indicated that the corresponding credentials could be found in `config.php`.
 
+This gave us two useful pieces of information: a valid application username and a specific configuration file worth targeting. Since config.php commonly contains application configuration and credential material, I treated it as a high-value target.
 
-
-
-Found mail page that revealed hr credential info to investigate 
-
-y
 
 
 ---
 
-### Initial Access 
+### Exploiting the Access API 
 
 
+We return to the `file.php` lead we investigated earlier. The endpoint accepts a URL through the `cv` parameter, causing the server to retrieve the specified resource. I began by manually probing the endpoint with arbitrary values, followed by testing HTTP and HTTPS URI schemes. During my testing I encountered an error stating "only local files are allowed".
 
-### Exploiting SSRF for Local File Read 
+![Error-Response](recruit-images/recruit_LFI_error.jpeg)
+
+ This error changed my approach and I began looking for ways in which a local file could be represented as a URI. The `file://` URI scheme is used to locate and access files on the local file systems, which made it a fitting candidate given the applications error response.
+
+ We then sent a GET request to the `file.php` endpoint, specifying `config.php` as the target resource using the `cv` parameter.
 
 
-Server-side URL fetching abused for arbitrart local file read via file:// scheme 
+![LFI](recruit-images/recruit_hr_password.jpeg)
+
+The GET request returned a `200 OK` status confirming that the resource was successfully retrieved. The response body contained the contents of `config.php`, including the HR credentials.
 
 
-
-
-## Privilege Esclation
+## Privilege Escalation
 
 
 
