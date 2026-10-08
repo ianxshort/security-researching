@@ -62,8 +62,52 @@ We return to the `file.php` lead we investigated earlier. The endpoint accepts a
 
 The GET request returned a `200 OK` status confirming that the resource was successfully retrieved. The response body contained the contents of `config.php`, including the HR credentials.
 
+Using the obtained credentials, we return to the HR portal and login
+
+![First-Flag](recruit-images/recruit_hr_flag.jpeg)
+> Successful login attempt and obtained the first flag  - THM {LOGGED_IN_USER}
 
 ## Privilege Escalation
+
+Inside of the HR portal is a search page that takes user input displays corresponding existing candidate applications. 
+
+![Candidate-Apps](recruit-images/recruit_applications.jpeg)
+
+It appears that the data is being fetched from the backend database, making it a possible candidate for SQL injection. We begin by testing the feasibility of SQL injection through manually probing the search field. We want to answer whether or not input is being injected into the SQL query build. 
+
+We begin detection testing by entering a single quote `'` into the search field. 
+
+![SQL-Error-Response](recruit-images/recruit_injection_confirm.jpeg)
+> Application returns database error (SQL) that disclosed `MySQL` as the backend database management system
+
+The application existing query seems to retreive database records and reflect those back into the webpage response. In this case, a `UNION-based SQLi injection` is an attractive point of attack. We wish to see if UNION injection results can be merged into the application normal result set and displayed. 
+
+To perform a successful `UNION` injection we must first determine the amount of columns returned in applications original query. This is because in order for the database to accept the `UNION`, the two queries need to return the same amount of columns.
+
+
+![Column-Count-Confirmed](recruit-images/recruit_col_count.jpeg)
+> Column enumeration confirms the column count as `4`
+
+With the column count confirmed we can attempt to purse `UNION-based database extraction` using `MySQL's` metadata tables 
+
+
+![Union-Database-Reveal](recruit-images/recruit_database.jpeg)
+> Database name is disclosed as `recruit_db`
+
+In MYSQL, database metadata is provided through a system database called `INFORMATION_SCHEMA`. Using SELECT queries on `INFORMATION_SCHEMA` we can retrieve information about databases, tables, columns, and other database objects. Now that we have the database we can use it to retrieve the existing tables within it. 
+
+![Table-Info](recruit-images/recruit_tablenames.jpeg)
+> Tables `candidates` and `users` are confirmed
+
+
+
+
+
+
+
+
+
+
 
 
 
