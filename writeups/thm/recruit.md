@@ -127,6 +127,14 @@ We return to the login page and successfully login as admin.
 
 
 
+### MITRE ATT&CK Mapping 
+
+| Tactic | Technique | Description |
+|---|---|---|
+| Reconnaissance | [T1595.003](https://attack.mitre.org/techniques/T1595/003/) | Used Gobuster with a wordlist to discover hidden web directories. | 
+| Credential Access | [T1552.001](https://attack.mitre.org/techniques/T1552/001/) | Executed arbitrary local file read to access hr credentials stored in `config.php` | 
+| Collection | [T1213.006](https://attack.mitre.org/techniques/T1213/006/) | Exploited UNION-Based SQL injection to enumerate MySQL database and extract admin credentials from `users` table. | 
+| Initial Access & Privilege Escalation | [T1078](https://attack.mitre.org/techniques/T1078/) | Authenticated using compromised `hr` credentials, then leveraged `admin` credentials to access privileged application functionality. | 
 
 
 
