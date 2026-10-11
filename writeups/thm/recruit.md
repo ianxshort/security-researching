@@ -75,6 +75,10 @@ Inside of the HR portal is a search page that takes user input displays correspo
 
 It appears that the data is being fetched from the backend database, making it a possible candidate for SQL injection. We begin by testing the feasibility of SQL injection through manually probing the search field. We want to answer whether or not input is being injected into the SQL query build. 
 
+
+#### Manual UNION-Based SQL Injection
+
+
 We begin detection testing by entering a single quote `'` into the search field. 
 
 ![SQL-Error-Response](recruit-images/recruit_injection_confirm.jpeg)
@@ -82,13 +86,15 @@ We begin detection testing by entering a single quote `'` into the search field.
 
 The application existing query seems to retreive database records and reflect those back into the webpage response. In this case, a `UNION-based SQLi injection` is an attractive point of attack. We wish to see if UNION injection results can be merged into the application normal result set and displayed. 
 
-To perform a successful `UNION` injection we must first determine the amount of columns returned in applications original query. This is because in order for the database to accept the `UNION`, the two queries need to return the same amount of columns.
+To perform a successful `UNION` injection we must first determine the amount of columns returned in applications original query. This is because in order for the database to accept the `UNION`, the two queries need to return the same amount of columns. 
+
+Because the backend database management system is `MySQL` we need to abide by it's comment style: two dashes followed by a white space (`-- `). We inject a third dash (`-- -`) to ensure that everything after our payload is commented out and ignored by the database.
 
 
 ![Column-Count-Confirmed](recruit-images/recruit_col_count.jpeg)
 > Column enumeration confirms the column count as `4`
 
-With the column count confirmed we can attempt to purse `UNION-based database extraction` using `MySQL's` metadata tables 
+With the column count confirmed we can attempt to purse `UNION-based database extraction` using `MySQL's` metadata tables. 
 
 
 ![Union-Database-Reveal](recruit-images/recruit_database.jpeg)
@@ -99,21 +105,25 @@ In MYSQL, database metadata is provided through a system database called `INFORM
 ![Table-Info](recruit-images/recruit_tablenames.jpeg)
 > Tables `candidates` and `users` are confirmed
 
+We continue by enumerating the `users` table. 
+
+![Table-Columns](recruit-images/recruit_columns.jpeg)
+> Columns listed in `users` table
+
+Here we see two sensitive columns: `username` and `password`. 
+
+![Admin-Creds](recruit-images/recruit_admincredentials.jpeg)
+
+By concatenating `username` and `password` into one column, we are able to extract admin credentials. 
 
 
 
 
+#### Gaining Admin Access
 
+We return to the login page and successfully login as admin.
 
-
-
-
-
-
-
-
-#### Manual UNION-Based SQL Injection
-
+![Flag-Capure](recruit-images/recruit_adminflag.jpeg)
 
 
 
