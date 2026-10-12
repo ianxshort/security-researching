@@ -36,8 +36,7 @@ Continuing our web server reconnaissance, we use `Gobuster` to enumerate hidden 
 We begin by returning to the browser and visiting the `mail` page that was discovered in our `gobuster` scan
 
 ![Mail-Page](recruit-images/recruit_hr_username.jpeg)
-
-The `/mail` directory revealed a `mail.log` file containing information about the HR account. The log disclosed the username `hr` and indicated that the corresponding credentials could be found in `config.php`.
+> The `/mail` directory revealed a `mail.log` file containing information about the HR account. The log disclosed the username `hr` and indicated that the corresponding credentials could be found in `config.php`.
 
 This gave us two useful pieces of information: a valid application username and a specific configuration file worth targeting. Since `config.php` commonly contains application configuration and credential material, I treated it as a high-value target.
 
