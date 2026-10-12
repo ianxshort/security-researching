@@ -1,4 +1,3 @@
-Template 
 ## Target: Recruit
 ## Platform: TryHackMe
 ## Date: 
