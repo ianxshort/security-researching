@@ -38,9 +38,9 @@ We begin by returning to the browser and visiting the `mail` page that was disco
 
 ![Mail-Page](recruit-images/recruit_hr_username.jpeg)
 
-The `/mail` directory revealed a `mail.log` file containing information about the HR account. The log disclosed the username hr and indicated that the corresponding credentials could be found in `config.php`.
+The `/mail` directory revealed a `mail.log` file containing information about the HR account. The log disclosed the username `hr` and indicated that the corresponding credentials could be found in `config.php`.
 
-This gave us two useful pieces of information: a valid application username and a specific configuration file worth targeting. Since config.php commonly contains application configuration and credential material, I treated it as a high-value target.
+This gave us two useful pieces of information: a valid application username and a specific configuration file worth targeting. Since `config.php` commonly contains application configuration and credential material, I treated it as a high-value target.
 
 
 
@@ -57,8 +57,7 @@ We return to the `file.php` lead we investigated earlier. The endpoint accepts a
 
 
 ![LFI](recruit-images/recruit_hr_password.jpeg)
-
-The GET request returned a `200 OK` status confirming that the resource was successfully retrieved. The response body contained the contents of `config.php`, including the HR credentials.
+> The GET request returned a `200 OK` status confirming that the resource was successfully retrieved. The response body contained the contents of `config.php`, including the HR credentials.
 
 Using the obtained credentials, we return to the HR portal and login
 
@@ -94,7 +93,7 @@ Because the backend database management system is `MySQL` we need to abide by it
 ![Column-Count-Confirmed](recruit-images/recruit_col_count.jpeg)
 > Column enumeration confirms the column count as `4`
 
-With the column count confirmed we can attempt to purse `UNION-based database extraction` using `MySQL's` metadata tables. 
+With the column count confirmed we can attempt to pursue `UNION-based database extraction` using `MySQL's` metadata tables. 
 
 
 ![Union-Database-Reveal](recruit-images/recruit_database.jpeg)
