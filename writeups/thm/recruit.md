@@ -8,7 +8,7 @@ Template
 
 ---
 
-### Recon 
+## Recon 
 
 We begin by performing a port scan on the target machine
 
@@ -27,7 +27,7 @@ We are presented with a login form after navigating to the address. Below the lo
 It appears the endpoint `file.php` accepts a `cv` URL parameter and retrieves the resource specified. Because the server makes a request based on a user-supplied URL, this makes the endpoint an interesting target for attempting to access resources that should otherwise be inaccessible. 
 
 
-#### Directory Enumeration
+### Directory Enumeration
 
 Continuing our web server reconnaissance, we use `Gobuster` to enumerate hidden files and directories.
 
@@ -43,8 +43,6 @@ The `/mail` directory revealed a `mail.log` file containing information about th
 This gave us two useful pieces of information: a valid application username and a specific configuration file worth targeting. Since config.php commonly contains application configuration and credential material, I treated it as a high-value target.
 
 
-
----
 
 ### Exploiting the Access API 
 
@@ -67,6 +65,8 @@ Using the obtained credentials, we return to the HR portal and login
 ![First-Flag](recruit-images/recruit_hr_flag.jpeg)
 > Successful login attempt and obtained the first flag  - THM {LOGGED_IN_USER}
 
+---
+
 ## Privilege Escalation
 
 Inside of the HR portal is a search page that takes user input displays corresponding existing candidate applications. 
@@ -76,7 +76,7 @@ Inside of the HR portal is a search page that takes user input displays correspo
 It appears that the data is being fetched from the backend database, making it a possible candidate for SQL injection. We begin by testing the feasibility of SQL injection through manually probing the search field. We want to answer whether or not input is being injected into the SQL query build. 
 
 
-#### Manual UNION-Based SQL Injection
+### Manual UNION-Based SQL Injection
 
 
 We begin detection testing by entering a single quote `'` into the search field. 
@@ -119,13 +119,13 @@ By concatenating `username` and `password` into one column, we are able to extra
 
 
 
-#### Gaining Admin Access
+### Gaining Admin Access
 
 We return to the login page and successfully login as admin.
 
 ![Flag-Capure](recruit-images/recruit_adminflag.jpeg)
 
-
+---
 
 ### MITRE ATT&CK Mapping 
 
