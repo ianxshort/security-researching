@@ -17,34 +17,37 @@ Scan found two ports
 
 Connected to the ftp server 
 
-**Enumerating FTP**
+#### Enumerating FTP
 
 Used Dir in to list the files stored on FTP 
 
 ![Found_Files](Images/ftp_files.jpeg)
 
-Downloaded both files using the get command 
+Downloaded both files using `get` 
 
-Used cat to reveal the contents of the exposed files 
 
-![credentials](Images/crocodile_creds.jpeg)
+![credentials](Images/crocodile_creds.jpeg)\
 
-Attempted to use obtained credentials to gain elevated access, but was denied
+Output the downloaded credentials using `cat`
 
-**Website Investigation**
+Attempted to use obtained credentials to gain elevated access, but was denied.
 
-Investigated the http server listed on the initial scan
+#### Pivot & Website Investigation
+
+After authentication denial I investigated the http server listed on the initial scan.
 
 http://10.129.108.196
 
-Used Wappalyzer to analyze the technology used to create the website 
+Used Wappalyzer to collect the technology stack of the website u
 
-![Wappalyzer_Results](Images/crocodile_gobuster.jpeg)
+![Wappalyzer_Results](Images/crocodile_wappalyzer.jpeg)
+> Notable technologies such as Web Server (Apache 2.4.41), OS (Ubuntu) and JS libraries (jQuery, Isotope)
+
 
 
 ### Exploitation
 
-Used Gobuster to discover hidden and hardly accessible pages and directories. 
+Used `Gobuster` to discover hidden and hardly accessible pages and directories. 
 
 ```bash
 gobuster dir -u 10.129.108.196/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php, html
@@ -52,18 +55,15 @@ gobuster dir -u 10.129.108.196/ -w /usr/share/wordlists/dirbuster/directory-list
 
 ![Gobuster_Results](Images/crocodile_gobuster.jpeg)
 
-Found page login.php. 
-Navigated to URL http://10.129.108.196/login.php
+Gobuster revealed several valuable pages (`login.php`, `assets.php`)
+Navigated to the login page at `http://10.129.108.196/login.php`
 
 ![Login_Page](Images/crocodile_login.jpeg)
 
-### Initial Access
+### Initial Access & Flag Retrieval
 
-Authenticated as admin using exposed credentials found on ftp server 
+Authenticated as admin using prviously obtained credentials and retrieved flag on homepage 
 
-## Flag Retrieval
-
-Retrieved flag on homepage 
 ![flag_capture](Images/crocodile_flag.jpeg)
 
 
