@@ -105,7 +105,7 @@ cat /home/robert/user.txt
 
 #### Privilege Escalation
 
-Checked Robert's groups using `id -- member of bugtracker` 
+Checked Robert's groups using `id` -> member of bugtracker
 
 Found SUID binary owned by the bugtracker group: 
 
