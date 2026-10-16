@@ -4,7 +4,7 @@
 ## Difficulty: Easy
 ## Tools: nmap, Wappalyzer, gobuster
 
-
+---
 
 ### Recon 
 
@@ -15,7 +15,6 @@ Scan found two ports
 - 21/tcp ftp (vsftpd 3.0.3)
 - 80/tcp http (Apache 2.4.41)
 
-Connected to the ftp server 
 
 #### Enumerating FTP
 
@@ -30,20 +29,18 @@ Downloaded both files using `get`
 
 Output the downloaded credentials using `cat`
 
-Attempted to use obtained credentials to gain elevated access, but was denied.
 
-#### Pivot & Website Investigation
+#### Website Investigation
 
-After authentication denial I investigated the http server listed on the initial scan.
+I investigated the http server listed on the initial scan.
 
-http://10.129.108.196
 
-Used Wappalyzer to collect the technology stack of the website u
+I Used Wappalyzer to collect the technology stack of the website.
 
 ![Wappalyzer_Results](Images/crocodile_wappalyzer.jpeg)
 > Notable technologies such as Web Server (Apache 2.4.41), OS (Ubuntu) and JS libraries (jQuery, Isotope)
 
-
+---
 
 ### Exploitation
 
@@ -60,9 +57,11 @@ Navigated to the login page at `http://10.129.108.196/login.php`
 
 ![Login_Page](Images/crocodile_login.jpeg)
 
+---
+
 ### Initial Access & Flag Retrieval
 
-Authenticated as admin using prviously obtained credentials and retrieved flag on homepage 
+Authenticated as admin using previously obtained credentials and retrieved flag on homepage 
 
 ![flag_capture](Images/crocodile_flag.jpeg)
 
