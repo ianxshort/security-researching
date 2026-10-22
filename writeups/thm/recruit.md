@@ -59,7 +59,7 @@ We return to the `file.php` lead we investigated earlier. The endpoint accepts a
 
 Using the obtained credentials, we return to the HR portal and login
 
-![First-Flag](recruit-images/recruit_hr_flag.jpeg)
+![First-Flag](recruit-images/recruit_hrflag_redacted.jpeg)
 > Successful login attempt and obtained the first flag  - THM {LOGGED_IN_USER}
 
 ---
@@ -78,7 +78,7 @@ It appears that the data is being fetched from the backend database, making it a
 
 We begin detection testing by entering a single quote `'` into the search field. 
 
-![SQL-Error-Response](recruit-images/recruit_injection_confirm.jpeg)
+![SQL-Error-Response](recruit-images/recruit_injection_confirming.jpeg)
 > Application returns database error (SQL) that disclosed `MySQL` as the backend database management system
 
 The application existing query seems to retreive database records and reflect those back into the webpage response. In this case, a `UNION-based SQLi injection` is an attractive point of attack. We wish to see if UNION injection results can be merged into the application normal result set and displayed. 
@@ -88,28 +88,28 @@ To perform a successful `UNION` injection we must first determine the amount of 
 Because the backend database management system is `MySQL` we need to abide by it's comment style: two dashes followed by a white space (`-- `). We inject a third dash (`-- -`) to ensure that everything after our payload is commented out and ignored by the database.
 
 
-![Column-Count-Confirmed](recruit-images/recruit_col_count.jpeg)
+![Column-Count-Confirmed](recruit-images/recruit_column_count.jpeg)
 > Column enumeration confirms the column count as `4`
 
 With the column count confirmed we can attempt to pursue `UNION-based database extraction` using `MySQL's` metadata tables. 
 
 
-![Union-Database-Reveal](recruit-images/recruit_database.jpeg)
+![Union-Database-Reveal](recruit-images/recruit_db_confirm.jpeg)
 > Database name is disclosed as `recruit_db`
 
 In MYSQL, database metadata is provided through a system database called `INFORMATION_SCHEMA`. Using SELECT queries on `INFORMATION_SCHEMA` we can retrieve information about databases, tables, columns, and other database objects. Now that we have the database we can use it to retrieve the existing tables within it. 
 
-![Table-Info](recruit-images/recruit_tablenames.jpeg)
+![Table-Info](recruit-images/recruit_table_names.jpeg)
 > Tables `candidates` and `users` are confirmed
 
 We continue by enumerating the `users` table. 
 
-![Table-Columns](recruit-images/recruit_columns.jpeg)
+![Table-Columns](recruit-images/recruit_columns1.jpeg)
 > Columns listed in `users` table
 
 Here we see two sensitive columns: `username` and `password`. 
 
-![Admin-Creds](recruit-images/recruit_admincredentials.jpeg)
+![Admin-Creds](recruit-images/recruit_admincreds.jpeg)
 
 By concatenating `username` and `password` into one column, we are able to extract admin credentials. 
 
@@ -120,7 +120,7 @@ By concatenating `username` and `password` into one column, we are able to extra
 
 We return to the login page and successfully login as admin.
 
-![Flag-Capure](recruit-images/recruit_adminflag.jpeg)
+![Flag-Capure](recruit-images/recruit_adminflag_redac.jpeg)
 
 ---
 
