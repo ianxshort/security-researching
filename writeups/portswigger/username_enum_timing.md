@@ -1,14 +1,11 @@
-## Target: Authentication system with IP-Based brute protection
-## Platform: PortSwigger Web Security Academy 
-## Date: 7/6/2026
-## Difficulty: Apprentice 
-## Tools: 
-- Burp Suite Intruder 
-- Burp Suite Repeater 
-- Burp Suite Proxy 
-- Burp Suite Comparer
+# Authentication — IP-Based Brute-Force Protection
+
+**Platform:** PortSwigger Web Security Academy | **Date:** 07/06/26 | **Difficulty:** Apprentice
+
+**Tools:** Burp Suite (Intruder, Repeater, Proxy, Comparer)
 
 ---
+
 
 
 ## Recon 

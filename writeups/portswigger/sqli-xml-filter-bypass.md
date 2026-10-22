@@ -1,13 +1,11 @@
-## Target: Port Swigger Web Security Academy - Shopping Application
-## Platform: PortSwigger
-## Date: 07/07/26
-## Difficulty: Practitioner
-## Tools: 
-- Burp Suite Repeater 
-- Burp Suite Proxy 
-- Hackvector
+# Shopping Application — PortSwigger Web Security Academy
+
+**Platform:** PortSwigger | **Date:** 07/07/26 | **Difficulty:** Practitioner
+
+**Tools:** Burp Suite (Repeater, Proxy), Hackvertor
 
 ---
+
 
 ### Recon 
 
