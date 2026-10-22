@@ -1,8 +1,11 @@
-## Target: Oopsie
-## Platform: HTB
-## Date: 06/12/26
-## Difficulty: Easy
-## Tools: nmap, Burp Suite, gobuster, netcat, php-reverse-shell
+# Oopsie — Hack The Box
+
+**Platform:** HTB | **Date:** 06/12/26 | **Difficulty:** Easy
+
+**Tools:** Nmap, Burp Suite, Gobuster, Netcat, PHP Reverse Shell
+
+---
+
 
 
 

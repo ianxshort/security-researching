@@ -1,8 +1,10 @@
-## Target: Three 
-## Platform: HTB
-## Date: 06/27/26
-## Difficulty: Easy
-## Tools: Nmap, Gobuster, AWSCLI, Netcat
+# Three — Hack The Box
+
+**Platform:** HTB | **Date:** 06/27/26 | **Difficulty:** Easy
+
+**Tools:** Nmap, Gobuster, AWS CLI, Netcat
+
+---
 
 
 

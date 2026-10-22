@@ -1,8 +1,8 @@
-## Target: Crocodile
-## Platform: HTB
-## Date: 6/24/26
-## Difficulty: Easy
-## Tools: nmap, Wappalyzer, gobuster
+# Crocodile — Hack The Box
+
+**Platform:** HTB | **Date:** 06/24/26 | **Difficulty:** Easy
+
+**Tools:** Nmap, Wappalyzer, Gobuster
 
 ---
 
