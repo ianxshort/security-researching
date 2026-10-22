@@ -1,8 +1,10 @@
-## Target: DC01.ctf.local (10.144.x.x — IP varied across sessions due to lab restarts)
-## Platform: TryHackMe — "Proxy"
-## Date: July 24-25, 2026
-## Difficulty: Medium
-## Tools: nmap, smbclient, netexec (nxc), Responder, Impacket suite (GetUserSPNs.py, getST.py, smbexec.py, secretsdump.py), hashcat
+# Proxy — Active Directory
+
+**Platform:** TryHackMe | **Date:** July 24–25, 2026 | **Difficulty:** Medium
+
+**Target:** DC01.ctf.local (10.144.x.x — IP varied across sessions)
+
+**Tools:** Nmap, SMBClient, NetExec, Responder, Impacket (GetUserSPNs.py, getST.py, smbexec.py, secretsdump.py), Hashcat
 
 ---
 
