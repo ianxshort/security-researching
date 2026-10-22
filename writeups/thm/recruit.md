@@ -1,9 +1,6 @@
-## Target: Recruit
-## Platform: TryHackMe
-## Date: 
-## Difficulty: Medium
-## Tools: 
-- gobuster
+# Recruit — Recruitment Portal
+
+**Platform:** TryHackMe | **Date:** 09/06/26 | **Difficulty:** Medium | **Tools:** Gobuster
 
 ---
 
