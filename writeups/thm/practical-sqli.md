@@ -1,8 +1,9 @@
-## Target: TryHackMe SQL Injection Practical Lab
-## Platform: TryHackME
-## Date: 07/08/2026
-## Difficulty: Easy
-## Tools: 
+# SQL Injection — Practical Lab
+
+**Platform:** TryHackMe | **Date:** 07/08/2026 | **Difficulty:** Easy
+
+---
+
 
 ### Level 1 
 
