@@ -49,6 +49,51 @@ Most of the identified application endpoints redirected to the login page (`inde
 In order to gain authentication, we need to find a valid set of credentials. Using the previously identified IT operations email, `help@support.thm`, we can attempt to brute-force the web applications login page. We do so by using `ffuf`, a open-source web fuzzing tool 
 
 
+```bash
+ffuf -u http://10.145.176.232/ \
+  -X POST \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'email=help%40support.thm&password=FUZZ' \
+  -w /usr/share/wordlists/seclists/Passwords/Common-Credentials/10k-most-common.txt
+```
+
+Upon executing the scan, we observed that every authentication returned an `HTTP 200 OK` with an identical response size of 2,768 bytes.
+
+![Status-Code](support-img/ffuf_status_code.jpeg)
+> *Initial ffuf scan made it difficult to distinguish successful authentication attempts from failed ones.
+
+In order to find an outlier, we add `-fc 200`, which hides HTTP responses that have a status code of 200. 
+
+![ffuf-password](support-img/ffuf.jpeg)
+> Status code of 302 returned, indicating the login attempt was successful and we were redirected to a page intended for authenticated users.
+
+We return to the login page and authenticate successfully using the credential pair .
+
+![Dashboard](support-img/dashboard.jpeg)
+>*We are presented with a dashboard page after successful authentication.*
+
+### Authenticated Enumeration
+
+After successful authentication, we open the browser DevTools to investigate authenticated session information.
+
+![Cookies](support-img/cookies.jpeg)
+> *We see the application issued two cookies: `PHPSESSID`, to maintain the authenticated state, and `isITUser` which appeared to determine whether the user was an IT users or not*
+
+Interestingly `isITUser` is 32 characters long and contains only hexadecimal characters, suggesting that it's value may be hashed. Because of that observation, we head to [CrackStation](https://crackstation.net/) to try to crack the hash.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
