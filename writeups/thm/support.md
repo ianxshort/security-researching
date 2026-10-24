@@ -60,12 +60,12 @@ ffuf -u http://10.145.176.232/ \
 Upon executing the scan, we observed that every authentication returned an `HTTP 200 OK` with an identical response size of 2,768 bytes.
 
 ![Status-Code](support-img/ffuf_status_code.jpeg)
-> *Initial ffuf scan made it difficult to distinguish successful authentication attempts from failed ones.
+> *Initial ffuf scan made it difficult to distinguish successful authentication attempts from failed ones.*
 
 In order to find an outlier, we add `-fc 200`, which hides HTTP responses that have a status code of 200. 
 
 ![ffuf-password](support-img/ffuf.jpeg)
-> Status code of 302 returned, indicating the login attempt was successful and we were redirected to a page intended for authenticated users.
+> *Status code of 302 returned, indicating the login attempt was successful and we were redirected to a page intended for authenticated users.*
 
 We return to the login page and authenticate successfully using the credential pair .
 
@@ -79,7 +79,99 @@ After successful authentication, we open the browser DevTools to investigate aut
 ![Cookies](support-img/cookies.jpeg)
 > *We see the application issued two cookies: `PHPSESSID`, to maintain the authenticated state, and `isITUser` which appeared to determine whether the user was an IT users or not*
 
-Interestingly `isITUser` is 32 characters long and contains only hexadecimal characters, suggesting that it's value may be hashed. Because of that observation, we head to [CrackStation](https://crackstation.net/) to try to crack the hash.
+Interestingly `isITUser` is 32 characters long and contains only hexadecimal characters, suggesting that it's value may be hashed. Because of that observation, we head to [CrackStation](https://crackstation.net/) to try to perform a hash lookup.
+
+![Cracked-Hash-Value](support-img/hashvalue.jpeg)
+> *Using CrackStation, we successfully recovered the plaintext value `false` from the MD5 hash*
+
+To test whether `isITUser` could be manipulated to escalate privileges, we generate the MD5 hash of the string `true`.
+
+```bash
+echo -n 'true' | md5sum
+```
+
+We take the resulting hash and subsitute it for the existing `isITUser` cookie value. 
+
+![Subsitute-Cookie](support-img/cookie_change.jpeg)
+> *Cookie subsitution successfully worked*
+
+After replacing the original `isITUser` cookie value with the MD5 hash and refreshing the page, a previously hidden IT Admin Panel appeared on the dashboard.
+
+### API Enumeration & IDOR
+
+Navigating to the IT Admin Panel, we are presented with a basic API documentation page, which appears to give users instructions for interacting with the API.
+
+![API-Page](support-img/api_page.jpeg)
+> *API page provides several pieces of API documentation: Endpoint `user/3`, HTTP Method `GET`, example request `GET /user/3`, example JSON response `email`,`2FA`, `admin` fields.*
+
+Visiting the `/user/3` endpoint, we find a JSON response containing account information for `help@support.thm`. The structure of the URL follows common REST API conventions, suggesting that user accounts are identified by numerical ID's. Based on this observation, we intercepted the HTTP request on Burp Suite and sent it to intruder to perform a Sniper attack. By doing so, we hope to enumerate and potentially access additional user resources. 
+
+
+![Intruder-Results](support-img/intruder_attack.jpeg)
+> *Intruder results showed four outlier response lengths for user ID's: 1, 0, 3, 2*
+
+A longer HTTP response can indicate that the server found a valid resource and returned additional information. To investigate these differences, we navigated to each of the four identified outliers in our browser. Visiting the `/user/2` endpoint returned information about `IT@support.thm`.
+
+![User-2](support-img/IT_Support.jpeg)
+> *User 2 objects fields suggested that `IT@support.thm` has the same permissions as `help@support.thm`*
+
+Interestingly, accessing the `/user/1` endpoint returned account information associated with an administrative user.
+
+![User-1](support-img/special_admin.jpeg)
+> *JSON response showed the account had admin privileges (`admin:true`) and had 2FA turned off (`2FA:false`)*
+
+## Local File Inclusion (LFI)
+
+After attempts to exploit mass assignment were unsuccessful, we shifted our attention elsewhere. The `dashboard.php` had a `Select Theme` feature where users were allowed to change the dashboard's background color through a drop-down menu.
+
+![Dashboard-Select-Theme](support-img/dashboard_select_theme.jpeg)
+> *Selecting Red from the drop down menu updated the URL to include the query parameter `skin` with a value of `red``?skin=red`*
+
+Initial attempts to access common sensitive files such as `/etc/passwd` and `/etc/shadow` through the `skin` query parameter were unsuccessful. This prompted further investigation into the web application's directory structure, particularly the `/skins/` directory, which was found in our initial directory enumeration with `Gobuster`.
+
+
+
+
+toward determining whether the application would accept directory traversal sequences from user-controlled parameters. 
+
+
+
+
+In our initial directory enumeration, `gobuster` identified a `info.php` endpoint. Returning to this finding, we see that the endpoint is dedicated to PHP and server configuration information. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
