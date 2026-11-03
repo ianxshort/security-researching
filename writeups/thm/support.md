@@ -132,6 +132,10 @@ Initial attempts to access common sensitive files such as `/etc/passwd` and `/et
 
 
 
+
+
+
+
 toward determining whether the application would accept directory traversal sequences from user-controlled parameters. 
 
 
