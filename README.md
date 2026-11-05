@@ -1,3 +1,4 @@
+
 # Security Research & Exploitation
 
 **Hands-on vulnerability research, penetration testing labs, and technical writeups.**
@@ -25,8 +26,10 @@ Each writeup emphasizes:
 | **Active Directory Security** | Kerberos, Delegation, Credential Attacks |
 | **SQL Injection** | Authentication Bypass, XML Filter Bypass |
 | **Cross-Site Scripting** | DOM XSS, Client-Side Injection |
-| **Authentication Security** | Username Enumeration, Timing Attacks |
-| **Server-Side Vulnerabilities** | SSRF, Command Injection |
+| **Authentication Security** | Username Enumeration, Timing Attacks, Session Manipulation |
+| **API Security** | IDOR, Broken Object Level Authorization (BOLA) |
+| **Server-Side Vulnerabilities** | SSRF, Local File Inclusion, Command Injection |
+| **Vulnerability Chaining** | Multi-Stage Exploitation, Privilege Escalation, Remote Code Execution |
 
 ---
 
@@ -36,6 +39,7 @@ Each writeup emphasizes:
 
 | Lab | Focus Area |
 |---|---|
+| [Support](writeups/thm/support.md) | Authentication, IDOR, LFI, Command Injection / RCE |
 | [AD Proxy](writeups/thm/ad-proxy.md) | Active Directory / Delegation |
 | [Practical SQLi](writeups/thm/practical-sqli.md) | SQL Injection |
 | [Recruit](writeups/thm/recruit.md) | Server-Side Request Forgery |
@@ -62,7 +66,7 @@ Each writeup emphasizes:
 
 **Web Application Security**
 
-`Burp Suite` `SQLmap` `FFUF` `OWASP`
+`Burp Suite` `SQLmap` `FFUF` `OWASP ZAP`
 
 **Network & Enumeration**
 
@@ -78,7 +82,7 @@ Each writeup emphasizes:
 
 ---
 
-##  Research Methodology
+## Research Methodology
 
 **Reconnaissance → Enumeration → Vulnerability Analysis → Exploitation → Reporting**
 
@@ -91,6 +95,7 @@ My approach emphasizes not just achieving successful exploitation, but understan
 All security testing is performed within authorized lab environments for educational purposes. Research is intended to demonstrate security concepts, improve technical understanding, and promote responsible security practices.
 
 *Writeups are published subject to the respective training platform's content-sharing policies.*
+
 
 
 
